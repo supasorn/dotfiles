@@ -6,4 +6,6 @@ mkdir -p ~/.config/lf
 ln -sf ~/dotfiles/lfrc ~/.config/lf/lfrc
 ln -sf ~/dotfiles/lfcd.sh ~/.config/lf/lfcd.sh
 
-git clone https://github.com/supasorn/nvim ~/.config/nvim
+git clone https://github.com/supasorn/nvim ~/dotfiles/nvim
+ln -sf ~/dotfiles/nvim ~/.config/nvim
+
