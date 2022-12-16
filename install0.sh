@@ -5,6 +5,7 @@ sudo apt-get update
 sudo apt -y install neovim vim zsh tmux curl ripgrep git exuberant-ctags nodejs unzip
 chsh -s /usr/bin/zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh) --unattended"
+sh ~/.vim/install.sh
 zsh
 
 
