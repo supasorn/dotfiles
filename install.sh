@@ -8,5 +8,5 @@ ln -sf ~/dotfiles/lfcd.sh ~/.config/lf/lfcd.sh
 
 git clone https://github.com/supasorn/nvim ~/dotfiles/nvim
 ln -sf ~/dotfiles/nvim -T ~/.config/nvim
-nvim +qall
+nvim 
 
