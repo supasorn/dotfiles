@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-ln -sf ~dotfiles/tmux.conf ~/.tmux.conf
+ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles/zshrc ~/.zshrc
 
 mkdir -p ~/.config/lf
