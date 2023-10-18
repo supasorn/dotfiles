@@ -127,6 +127,7 @@ export TERM="xterm-256color"
 alias v="nvim"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/home/supasorn/.fzf/bin:$PATH"
 
 alias spaces="du -hsx * | sort -h"
 alias space="du -hx * | sort -h"
