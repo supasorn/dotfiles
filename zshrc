@@ -252,6 +252,11 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+if [[ -n $SSH_CLIENT ]]; then
+    # Save the SSH_CLIENT to a file
+    echo $SSH_CLIENT > ~/ssh_client_info.txt
+fi
+
 
 
 
