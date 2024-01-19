@@ -115,12 +115,13 @@ export BAT_THEME="gruvbox-dark"
 export FZF_MARKS_JUMP=^h
 
 export FZFZ_SUBDIR_LIMIT=0
-export FZFZ_EXTRA_OPTS="--reverse"
+export FZFZ_EXTRA_OPTS="--reverse --no-preview"
 #export FZF_CTRL_R_OPTS="--reverse"
 export FZF_CTRL_R_OPTS="--reverse --preview 'echo {} |sed -e \"s/^ *\([0-9]*\) *//\" -e \"s/.\\{\$COLUMNS\\}/&\\n/g\"' --preview-window down:3:hidden --bind ?:toggle-preview"
 
 export LD_LIBRARY_PATH="/usr/local/lib/"
 
+export OPENAI_API_KEY='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'
 export TERM="xterm-256color"
 #export TERM="screen-256color"
 
@@ -138,7 +139,8 @@ alias tm="tmux"
 alias tma="tmux a"
 
 alias rgf='rg --files | rg'
-alias pdf='cd /Users/supasorn/pdf_signer; source ~/venv/bin/activate; python multisign.py'
+# alias pdf='cd /Users/supasorn/projects/pdf_signer; source ~/venv/bin/activate; python3 multisign.py'
+alias pdf='cd /Users/supasorn/projects/pdf_signer; python3 multisign.py'
 
 fshere() {
   cmd="sshfs -o cache=no -o IdentityFile=/home/$USER/.ssh/id_rsa $USER@$@ $PWD"
@@ -220,19 +222,14 @@ if [[ $hn == "ROG504" ]]; then
   alias rs="python /home2/research/orbiter/cluster_utils/rsync_folder.py"
   alias mountall="python /home2/research/orbiter/cluster_utils/mountall.py"
 
-elif [[ $hn == "Supasorns-MacBook-Pro.local" ]]; then
-  ###-tns-completion-start-###
-  if [ -f /Users/supasorn/.tnsrc ]; then 
-      source /Users/supasorn/.tnsrc 
-  fi
+elif [[ $hn == "ssmb.local" ]]; then
   alias ut="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'"
-  export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-
-  ###-tns-completion-end-###
-  source /Users/supasorn/.config/broot/launcher/bash/br
-else
-  alias run="python3 ~/cluster_utils/tasklauncher_uni.py"
+  alias run="python3 ~/research/cluster_utils/tasklauncher.py"
   alias ul="tmux a -t UL"
+
+  export DYLD_LIBRARY_PATH=/usr/local/lib
+  export LDFLAGS="-L/usr/local/lib"
+  export CFLAGS="-I/usr/local/include"
 fi
 
 source ~/.vim/export_lf_icons.sh 2> /dev/null 
