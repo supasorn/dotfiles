@@ -226,7 +226,7 @@ elif [[ $hn == "ssmb.local" ]]; then
   alias run="python3 ~/research/cluster_utils/tasklauncher.py"
   alias ul="tmux a -t UL"
 
-  export DYLD_LIBRARY_PATH=/usr/local/lib
+  export DYLD_LIBRARY_PATH="/usr/local/lib"
   export LDFLAGS="-L/usr/local/lib"
   export CFLAGS="-I/usr/local/include"
 fi
