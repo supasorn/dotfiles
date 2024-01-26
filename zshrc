@@ -115,9 +115,9 @@ export BAT_THEME="gruvbox-dark"
 export FZF_MARKS_JUMP=^h
 
 export FZFZ_SUBDIR_LIMIT=0
-export FZFZ_EXTRA_OPTS="--reverse --no-preview --preview-window up:0 --keep-right"
-#export FZF_CTRL_R_OPTS="--reverse"
-export FZF_CTRL_R_OPTS="--reverse --preview 'echo {} |sed -e \"s/^ *\([0-9]*\) *//\" -e \"s/.\\{\$COLUMNS\\}/&\\n/g\"' --preview-window down:3:hidden --bind ?:toggle-preview"
+export FZFZ_EXTRA_OPTS="--reverse --preview-window up:0 --keep-right"
+export FZF_CTRL_R_OPTS="--reverse"
+# export FZF_CTRL_R_OPTS="--reverse --preview 'echo {} |sed -e \"s/^ *\([0-9]*\) *//\" -e \"s/.\\{\$COLUMNS\\}/&\\n/g\"' --preview-window down:3:hidden --bind ?:toggle-preview"
 
 export LD_LIBRARY_PATH="/usr/local/lib/"
 
