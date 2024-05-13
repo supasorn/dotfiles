@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 ln -sf ~/dotfiles/zshrc ~/.zshrc
 
 mkdir -p ~/.config/lf
