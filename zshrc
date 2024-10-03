@@ -137,9 +137,11 @@ alias rg1="rg --max-depth=1"
 alias tm="tmux"
 alias tma="tmux a"
 
+alias lss="ls -lahrS"
+
 alias rgf='rg --files | rg'
-# alias pdf='cd /Users/supasorn/projects/pdf_signer; source ~/venv/bin/activate; python3 multisign.py'
-alias pdf='cd /Users/supasorn/projects/pdf_signer; python3 multisign.py'
+alias pdf='cd /Users/supasorn/projects/pdf_signer; source ~/Projects/forex/venv_forex/bin/activate; python3 multisign.py'
+# alias pdf='cd /Users/supasorn/projects/pdf_signer; python3 multisign.py'
 
 fshere() {
   cmd="sshfs -o cache=no -o IdentityFile=/home/$USER/.ssh/id_rsa $USER@$@ $PWD"
@@ -147,6 +149,7 @@ fshere() {
   eval $cmd
   cd ..
   cd -
+  #sshfs -o follow_symlinks -o cache=no -o IdentityFile=~/.ssh/id_rsa supasorn@v3:/data/supasorn/diffusers diffusers
 } 
 
 source-git() {
