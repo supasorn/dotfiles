@@ -181,10 +181,10 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=23'
 
 UNAME=$(uname | tr "[:upper:]" "[:lower:]")
 if [[ "$UNAME" == "linux" ]]; then
-  export NOCONDA_PATH="$PATH:/usr/local/cuda-10.2/bin"
-  export PATH="$NOCONDA_PATH:/home2/$USER/anaconda3/bin"
+  export NOCONDA_PATH="$PATH:/usr/local/cuda-11.8/bin"
+  export PATH="$NOCONDA_PATH:/home2/$USER/anaconda3/bin:/usr/local/go/bin"
 
-  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-10.2/lib64:/usr/local/cuda/extras/CUPTI/lib64"
+  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-11.8/lib64:/usr/local/cuda/extras/CUPTI/lib64"
 fi
 
 unset TMUX  # allow nested tmux
@@ -232,6 +232,9 @@ elif [[ $hn == "ssmb.local" ]]; then
   export DYLD_LIBRARY_PATH="/usr/local/lib"
   export LDFLAGS="-L/usr/local/lib"
   export CFLAGS="-I/usr/local/include"
+else 
+  alias run="python3 /home/supasorn/cluster_utils/tasklauncher_uni.py"
+  alias ul="tmux a -t UL"
 fi
 
 source ~/.vim/export_lf_icons.sh 2> /dev/null 
