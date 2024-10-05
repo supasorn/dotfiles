@@ -10,7 +10,7 @@ export ZSH="${omz/#\~/$HOME}"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
-ZSH_THEME="blinks"
+ZSH_THEME=""
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -198,7 +198,6 @@ if [ -f "$LFCD" ]; then
 fi
 bindkey -s '^o' 'lfcd\n'  # zsh
 
-
 if [[ $hn == "ROG504" ]]; then
   tf-term() {
     tmux new-session \; \
@@ -267,3 +266,4 @@ export PATH="$HOME/.local/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+source ~/dotfiles/blinks_singularity.zsh-theme
