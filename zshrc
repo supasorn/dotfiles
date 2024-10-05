@@ -119,7 +119,7 @@ export FZFZ_EXTRA_OPTS="--reverse --preview-window up:0 --keep-right"
 export FZF_CTRL_R_OPTS="--reverse"
 # export FZF_CTRL_R_OPTS="--reverse --preview 'echo {} |sed -e \"s/^ *\([0-9]*\) *//\" -e \"s/.\\{\$COLUMNS\\}/&\\n/g\"' --preview-window down:3:hidden --bind ?:toggle-preview"
 
-export LD_LIBRARY_PATH="/usr/local/lib/"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/"
 
 export TERM="xterm-256color"
 #export TERM="screen-256color"
