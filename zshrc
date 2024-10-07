@@ -129,6 +129,8 @@ alias v="nvim"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export PATH="$HOME/.fzf/bin:$PATH"
 
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+
 alias spaces="du -hsx * | sort -h"
 alias space="du -hx * | sort -h"
 
@@ -180,17 +182,15 @@ zstyle ':zce:*' bg 'fg=3'
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=23'
 
 UNAME=$(uname | tr "[:upper:]" "[:lower:]")
-if [[ "$UNAME" == "linux" ]]; then
-  export NOCONDA_PATH="$PATH:/usr/local/cuda-11.8/bin"
-  export PATH="$NOCONDA_PATH:/home2/$USER/anaconda3/bin:/usr/local/go/bin"
+# if [[ "$UNAME" == "linux" ]]; then
+  # export NOCONDA_PATH="$PATH:/usr/local/cuda-11.8/bin"
+  # export PATH="$NOCONDA_PATH:/home2/$USER/anaconda3/bin:/usr/local/go/bin"
 
-  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-11.8/lib64:/usr/local/cuda/extras/CUPTI/lib64"
-fi
+  # export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-11.8/lib64:/usr/local/cuda/extras/CUPTI/lib64"
+# fi
 
 unset TMUX  # allow nested tmux
 hn="$(hostname)"
-
-export CUDA_DEVICE_ORDER=PCI_BUS_ID
 
 LFCD="$HOME/.config/lf/lfcd.sh"                               
 if [ -f "$LFCD" ]; then
@@ -238,30 +238,12 @@ fi
 
 source ~/.vim/export_lf_icons.sh 2> /dev/null 
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home2/supasorn/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home2/supasorn/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home2/supasorn/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home2/supasorn/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 
 if [[ -n $SSH_CLIENT ]]; then
     # Save the SSH_CLIENT to a file
     echo $SSH_CLIENT > ~/ssh_client_info.txt
 fi
-
-
-
-
-export PATH="$HOME/.local/bin:$PATH"
+# export PATH="$HOME/.local/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
