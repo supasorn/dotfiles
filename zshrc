@@ -130,6 +130,7 @@ alias v="nvim"
 export PATH="$HOME/.fzf/bin:$PATH"
 
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export PATH="$HOME/.local/bin:$PATH"
 
 alias spaces="du -hsx * | sort -h"
 alias space="du -hx * | sort -h"
@@ -243,7 +244,6 @@ if [[ -n $SSH_CLIENT ]]; then
     # Save the SSH_CLIENT to a file
     echo $SSH_CLIENT > ~/ssh_client_info.txt
 fi
-# export PATH="$HOME/.local/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
