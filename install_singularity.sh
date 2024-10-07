@@ -13,7 +13,7 @@ sudo apt-get install -y \
     libglib2.0-dev
 wget https://go.dev/dl/go1.23.2.linux-amd64.tar.gz
 sudo tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz
-export PATH=$PATH:/usr/local/go/bin
+export PATH=/usr/local/go/bin:$PATH
 wget https://github.com/sylabs/singularity/releases/download/v4.2.1/singularity-ce-4.2.1.tar.gz
 tar -xzf singularity-ce-4.2.1.tar.gz
 cd singularity-ce-4.2.1/
@@ -21,4 +21,15 @@ cd singularity-ce-4.2.1/
 cd builddir/
 make -j8
 sudo make install
+
+FUSE_CONF="/etc/fuse.conf"
+
+# Check if user_allow_other is already in the file
+if ! grep -q "^user_allow_other" "$FUSE_CONF"; then
+    echo "user_allow_other not found. Adding it to $FUSE_CONF."
+    # Append user_allow_other to the file
+    echo "user_allow_other" | sudo tee -a "$FUSE_CONF" > /dev/null
+else
+    echo "user_allow_other is already present in $FUSE_CONF."
+fi
 
