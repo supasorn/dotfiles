@@ -265,3 +265,16 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Check if the directory exists
+if [ -d "/startup_scripts" ]; then
+  # Loop through all .sh files in the directory
+  for script in /startup_scripts/*.sh; do
+    # Check if there are any .sh files
+    if [ -f "$script" ]; then
+      echo "Running $script..."
+      source "$script"
+    fi
+  done
+else
+  echo "Directory /startup_scripts/ does not exist. Skipping."
+fi
