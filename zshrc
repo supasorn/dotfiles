@@ -134,8 +134,8 @@ alias space="du -hx * | sort -h"
 
 alias rg1="rg --max-depth=1"
 
-alias tm="tmux"
-alias tma="tmux a"
+alias tm="tmux -u"
+alias tma="tmux -u a"
 
 alias lss="ls -lahrS"
 
