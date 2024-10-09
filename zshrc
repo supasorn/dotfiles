@@ -227,6 +227,7 @@ if [[ $hn == "ROG504" ]]; then
 elif [[ $hn == "ssmb.local" ]]; then
   alias ut="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'"
   alias run="python3 ~/research/cluster_utils/tasklauncher.py"
+  alias sg="python3 ~/research/cluster_utils/singularitylauncher.py"
   alias ul="tmux a -t UL"
 
   export DYLD_LIBRARY_PATH="/usr/local/lib"
@@ -234,6 +235,7 @@ elif [[ $hn == "ssmb.local" ]]; then
   export CFLAGS="-I/usr/local/include"
 else 
   alias run="python3 /home/supasorn/cluster_utils/tasklauncher_uni.py"
+  alias sg="python3 /home/supasorn/cluster_utils/singularitylauncher.py"
   alias ul="tmux a -t UL"
 fi
 
@@ -275,6 +277,4 @@ if [ -d "/startup_scripts" ]; then
       source "$script"
     fi
   done
-else
-  echo "Directory /startup_scripts/ does not exist. Skipping."
 fi
