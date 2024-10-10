@@ -234,8 +234,8 @@ elif [[ $hn == "ssmb.local" ]]; then
   export LDFLAGS="-L/usr/local/lib"
   export CFLAGS="-I/usr/local/include"
 else 
-  alias run="python3 /home/supasorn/cluster_utils/tasklauncher_uni.py"
-  alias sg="python3 /home/supasorn/cluster_utils/singularitylauncher.py"
+  # alias run="python3 /home/supasorn/cluster_utils/tasklauncher_uni.py"
+  alias run="python3 /home/supasorn/cluster_utils/singularitylauncher.py"
   alias ul="tmux a -t UL"
 fi
 
