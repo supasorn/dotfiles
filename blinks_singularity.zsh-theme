@@ -26,7 +26,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 if [[ -n "$SINGULARITY_NAME" ]]; then
   # Add a small indicator before the current prompt
   # PROMPT="[S:$SINGULARITY_NAME]$PROMPT"
-  SINGULARITY="%F{red}✶%f"
+  SINGULARITY="%F{red}✼%f"
 else
   SINGULARITY=""
 fi
