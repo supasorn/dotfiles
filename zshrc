@@ -278,3 +278,11 @@ if [ -d "/startup_scripts" ]; then
     fi
   done
 fi
+
+if [[ $1 == eval ]]
+then
+    "$@"
+set --
+fi
+
+
