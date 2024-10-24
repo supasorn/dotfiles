@@ -226,8 +226,7 @@ if [[ $hn == "ROG504" ]]; then
 
 elif [[ $hn == "ssmb.local" ]]; then
   alias ut="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'"
-  alias run="python3 ~/research/cluster_utils/tasklauncher.py"
-  alias sg="python3 ~/research/cluster_utils/singularitylauncher.py"
+  alias run="python3 ~/research/cluster_utils/singularitylauncher.py"
   alias ul="tmux a -t UL"
 
   export DYLD_LIBRARY_PATH="/usr/local/lib"
