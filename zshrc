@@ -246,9 +246,14 @@ if [[ -n $SSH_CLIENT ]]; then
     echo $SSH_CLIENT > ~/ssh_client_info.txt
 fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# don't call this by default, it's slow in singularity
+load_nvm() {
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
+}
+
 source ~/dotfiles/blinks_singularity.zsh-theme
 
 # >>> conda initialize >>>
