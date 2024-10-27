@@ -29,7 +29,7 @@ read -p "All processes of the user $USERNAME need to be killed? (y/n): " confirm
 if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
     echo "Killing all processes of user $USERNAME..."
     sudo pkill -u "$USERNAME"
-    echo "Waiting for processes to terminate..."
+    echo "Waiting 3 seconds for processes to terminate..."
     sleep 3 
 else
     echo "Skipping process termination for user $USERNAME."
