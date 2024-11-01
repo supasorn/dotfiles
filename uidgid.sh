@@ -33,7 +33,7 @@ fi
 read -p "All processes of the user $USERNAME need to be killed? (y/n): " confirm
 if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
     echo "Killing all processes of user $USERNAME..."
-    sudo pkill -u "$USERNAME"
+    pkill -u "$USERNAME"
     echo "Waiting 3 seconds for processes to terminate..."
     sleep 3 
     while pgrep -u "$USERNAME" > /dev/null; do
@@ -50,8 +50,8 @@ echo "Current UID: $OLD_UID"
 echo "Current GID: $OLD_GID"
 echo "New UID and GID: $NEW_ID"
 
-sudo groupmod -g "$NEW_ID" "$USERNAME"
-sudo usermod -u "$NEW_ID" -g "$NEW_ID" "$USERNAME"
+groupmod -g "$NEW_ID" "$USERNAME"
+usermod -u "$NEW_ID" -g "$NEW_ID" "$USERNAME"
 
 # Update file ownership in the specified directories
 DIRECTORIES=("/home/$USERNAME" "/home2/$USERNAME" "/data/$USERNAME" "/data2/$USERNAME")
@@ -60,10 +60,10 @@ echo "Updating file ownership in ${DIRECTORIES[*]}..."
 for DIR in "${DIRECTORIES[@]}"; do
     if [ -d "$DIR" ]; then
         echo "Updating files with old UID $OLD_UID in $DIR..."
-        sudo find "$DIR" -xdev -user "$OLD_UID" -exec chown -h "$NEW_ID" {} +
+        find "$DIR" -xdev -user "$OLD_UID" -exec chown -h "$NEW_ID" {} +
 
         echo "Updating files with old GID $OLD_GID in $DIR..."
-        sudo find "$DIR" -xdev -group "$OLD_GID" -exec chgrp -h "$NEW_ID" {} +
+        find "$DIR" -xdev -group "$OLD_GID" -exec chgrp -h "$NEW_ID" {} +
     else
         echo "Directory $DIR does not exist, skipping..."
     fi
