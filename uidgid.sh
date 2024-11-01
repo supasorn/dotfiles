@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 
+   exit 1
+fi
+
 # Check for required arguments
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <username> <new_id>"
