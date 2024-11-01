@@ -31,6 +31,10 @@ if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
     sudo pkill -u "$USERNAME"
     echo "Waiting 3 seconds for processes to terminate..."
     sleep 3 
+    while pgrep -u "$USERNAME" > /dev/null; do
+        echo "Processes still running for user $USERNAME. Waiting..."
+    sleep 1  # Check every second
+done
 else
     echo "Skipping process termination for user $USERNAME."
     exit 1
