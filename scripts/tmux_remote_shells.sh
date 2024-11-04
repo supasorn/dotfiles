@@ -45,6 +45,7 @@ tmux set-option -t "$tmux_session" pane-active-border-style 'fg=#4a2900 bg=#e698
 tmux set-option -t "$tmux_session" pane-border-style 'fg=#f6d1a2 bg=#916016'
 
 tmux set-hook -w -t "$tmux_session" pane-focus-in 'run-shell "tmux set-window-option synchronize-panes off"'
+tmux setw pane-border-status top
 
 # Calculate number of columns needed for a balanced grid
 cols=$(echo "sqrt($total_nodes)" | bc)
@@ -72,3 +73,6 @@ done
 
 # Attach to the tmux session
 tmux attach-session -t "$tmux_session"
+
+# turn out sync
+tmux set-window-option -t "$tmux_session" synchronize-panes on
