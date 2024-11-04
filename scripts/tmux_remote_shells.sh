@@ -42,8 +42,9 @@ tmux new-session -d -s "$tmux_session"
 
 # Apply specific pane border styles for this session
 tmux set-option -t "$tmux_session" pane-active-border-style 'fg=#4a2900 bg=#e69823'
-tmux set-option -t "$tmux_session" allow-rename off
 tmux set-option -t "$tmux_session" pane-border-style 'fg=#f6d1a2 bg=#916016'
+
+tmux set-hook -w -t "$tmux_session" pane-focus-in 'run-shell "tmux set-window-option synchronize-panes off"'
 
 # Calculate number of columns needed for a balanced grid
 cols=$(echo "sqrt($total_nodes)" | bc)
