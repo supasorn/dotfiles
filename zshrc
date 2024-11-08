@@ -254,6 +254,12 @@ load_nvm() {
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
 }
 
+# if not inside singularity, call load_nvm()
+if [[ -z $SINGULARITY_NAME ]]; then
+  load_nvm
+fi
+
+
 source ~/dotfiles/blinks_singularity.zsh-theme
 
 # >>> conda initialize >>>
