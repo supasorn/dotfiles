@@ -1,3 +1,5 @@
+# zmodload zsh/zprof
+# START_TIME=$(($(date +%s%3N)))
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -9,8 +11,8 @@ export ZSH="${omz/#\~/$HOME}"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="robbyrussell"
-ZSH_THEME=""
+# ZSH_THEME="robbyrussell"
+# ZSH_THEME="blinks"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -290,3 +292,7 @@ set --
 fi
 
 
+# zprof
+# END_TIME=$(($(date +%s%3N)))
+# TOTAL_TIME=$((END_TIME - START_TIME))
+# echo "Total load time: ${TOTAL_TIME} milliseconds"
