@@ -1,5 +1,6 @@
 # https://github.com/blinks zsh theme
 
+# calling this causes buggy typing in singularity
 function _prompt_char() {
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     echo "%{%F{blue}%}±%{%f%k%b%}"
@@ -31,9 +32,14 @@ else
   SINGULARITY=""
 fi
 
+# this version calls _prompt_char() which causes typing bugs:
+# PROMPT='%{%f%k%b%}
+# %{%K{${bkg}}$SINGULARITY%B%F{green}%}%n%{%B%F{blue}%}@%{%B%F{cyan}%}%m%{%B%F{green}%} %{%b%F{yellow}%K{${bkg}}%}%~%{%B%F{green}%}$(git_prompt_info)%E%{%f%k%b%}
+# %{%K{${bkg}}%}$(_prompt_char)%{%K{${bkg}}%} %#%{%f%k%b%} '
+
 PROMPT='%{%f%k%b%}
 %{%K{${bkg}}$SINGULARITY%B%F{green}%}%n%{%B%F{blue}%}@%{%B%F{cyan}%}%m%{%B%F{green}%} %{%b%F{yellow}%K{${bkg}}%}%~%{%B%F{green}%}$(git_prompt_info)%E%{%f%k%b%}
-%{%K{${bkg}}%}$(_prompt_char)%{%K{${bkg}}%} %#%{%f%k%b%} '
+%{%K{${bkg}}%}%{%K{${bkg}}%} %#%{%f%k%b%} '
 
 
 
