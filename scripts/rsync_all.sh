@@ -2,12 +2,12 @@
 
 # Define the list of paths
 paths=(
-    "v1:/home2/supasorn/singularity"
-    "pure-c2:/mnt/data/supasorn/singularity"
-    "v21:/home2/supasorn/singularity"
-    "v23:/home2/supasorn/singularity"
-    "10.204.100.61:/ist-nas/users/supasorn/singularity"
-    "10.204.100.61:/ist/users/supasorn/singularity"
+    "v1:/home2/supasorn/singularity/"
+    "pure-c2:/mnt/data/supasorn/singularity/"
+    "v21:/home2/supasorn/singularity/"
+    "v23:/home2/supasorn/singularity/"
+    "10.204.100.61:/ist-nas/users/supasorn/singularity/"
+    "10.204.100.61:/ist/users/supasorn/singularity/"
 )
 
 # Display the list of paths
