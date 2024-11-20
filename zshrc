@@ -134,8 +134,8 @@ export PATH="$HOME/.fzf/bin:$PATH"
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
 export PATH="$HOME/.local/bin:$PATH"
 
-alias spaces="du -hsx * .* | sort -h"
-alias space="du -hx * .* | sort -h"
+alias spaces="sudo du -hsx * .* | sort -h"
+alias space="sudo du -hx * .* | sort -h"
 
 alias rg1="rg --max-depth=1"
 
