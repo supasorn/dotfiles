@@ -8,9 +8,9 @@ import sys
 paths = [
     "v1:/home2/supasorn/singularity/",
     "pure-c2:/mnt/data/supasorn/singularity/",
-    "v21:/home2/supasorn/singularity/",
+    # "v21:/home2/supasorn/singularity/",
     "v23:/home2/supasorn/singularity/",
-    "10.204.100.61:/ist-nas/users/supasorn/singularity/",
+    # "10.204.100.61:/ist-nas/users/supasorn/singularity/",
     "10.204.100.61:/ist/users/supasorn/singularity/"
 ]
 
@@ -34,7 +34,6 @@ def is_localhost(alias):
 selected_path = None
 for path in paths:
   if is_localhost(path.split(":")[0]):
-    print("Local path detected: "+path)
     selected_path = path.split(":", 1)[1]
     break
 
@@ -53,13 +52,11 @@ for path in paths:
         continue
 
     if action == '-u':  # Upload
-      command = f"rsync -avvh {rsync_extra_args} {selected_path} {host}:{target_path}"
+      command = f"rsync -avh {rsync_extra_args} {selected_path} {host}:{target_path}"
     elif action == '-d':  # Download
-      command = f"rsync -avvh {rsync_extra_args} {host}:{target_path} {selected_path}"
+      command = f"rsync -avh {rsync_extra_args} {host}:{target_path} {selected_path}"
     else:
       continue
-
-    command = "echo \""+command+"\""
 
     print(f"Running: {command}")
     result = subprocess.run(command, shell=True)
