@@ -1,5 +1,10 @@
 #!/bin/bash
 
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 
+   exit 1
+fi
 # Define the directories and output files
 declare -A directories=(
   ["/home"]="home.txt"
@@ -17,7 +22,7 @@ for dir in "${!directories[@]}"; do
     echo "Processing $dir..."
     
     # Run the du command with sudo and save the output
-    sudo du -hsx "$dir"/* "$dir"/.[!.]* "$dir"/..?* 2>/dev/null | sort -h > "$output_file"
+    du -hsx "$dir"/* "$dir"/.[!.]* "$dir"/..?* 2>/dev/null | sort -h > "$output_file"
     
     echo "Saved results to $output_file"
   else
