@@ -1,6 +1,7 @@
 import curses
 import socket
 import psutil
+import os
 
 def is_localhost(alias):
     try:
@@ -99,6 +100,7 @@ def main(paths):
             rsync_extra_args = "--delete" if selection & 2 else ""
             command = f"rsync -avh {rsync_extra_args} {host}:{target_path} {selected_path}"
             print(command)
+            os.system(command)
 
     for path, selection in selected_paths:
         host, target_path = path.split(":", 1)
@@ -106,7 +108,7 @@ def main(paths):
             rsync_extra_args = "--delete" if selection & 8 else ""
             command = f"rsync -avh {rsync_extra_args} {selected_path} {host}:{target_path}"
             print(command)
-
+            os.system(command)
 
 
 if __name__ == "__main__":
