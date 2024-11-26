@@ -141,6 +141,7 @@ spaces() {
   (setopt null_glob; sudo du -hsx -- * .* | sort -h)
 }
 
+alias gp="~/dotfiles/scripts/gitpull.sh"
 alias rg1="rg --max-depth=1"
 
 alias tm="tmux -u"
