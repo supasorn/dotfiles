@@ -7,7 +7,7 @@ function cd() {
     local original_dir="$(pwd)"
     
     while true; do
-        local lsd=$(ls -p | grep '/$' | sed 's;/$;;')
+        local lsd=$(ls -ap | grep '/$' | sed 's;/$;;')
         local dir="$(printf '%s\n' "${lsd[@]}" |
             FZF_DEFAULT_OPTS="--height 40% --layout=reverse --prompt='$(pwd)/'" \
             fzf --bind 'ctrl-w:execute-silent(builtin cd ..; echo ..)' --expect=ctrl-w,esc)"
