@@ -208,6 +208,11 @@ if [ -f "$LFCD" ]; then
 fi
 bindkey -s '^o' 'lfcd\n'  # zsh
 
+FZFCD="$HOME/dotfiles/fzf-cd.sh"                               
+if [ -f "$FZFCD" ]; then
+    source "$FZFCD"
+fi
+
 if [[ $hn == "ROG504" ]]; then
   tf-term() {
     tmux new-session \; \
