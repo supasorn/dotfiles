@@ -7,7 +7,8 @@ function cd() {
     local original_dir="$(pwd)"
     
     while true; do
-        local lsd=$(ls -ap | grep '/$' | sed 's;/$;;')
+        # local lsd=$(ls -ap | grep '/$' | sed 's;/$;;')
+        local lsd=$(ls -ap | grep '/$' | grep -vE '^\./?$|^\.\./?$' | sed 's;/$;;') # exclude . and ..
         local dir="$(printf '%s\n' "${lsd[@]}" |
             FZF_DEFAULT_OPTS="--height 40% --layout=reverse --prompt='$(pwd)/'" \
             fzf --expect=ctrl-w,esc)"
