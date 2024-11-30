@@ -10,7 +10,7 @@ function cd() {
         local lsd=$(ls -ap | grep '/$' | sed 's;/$;;')
         local dir="$(printf '%s\n' "${lsd[@]}" |
             FZF_DEFAULT_OPTS="--height 40% --layout=reverse --prompt='$(pwd)/'" \
-            fzf --bind 'ctrl-w:execute-silent(builtin cd ..; echo ..)' --expect=ctrl-w,esc)"
+            fzf --expect=ctrl-w,esc)"
         
         # Extract the selected directory and key press event
         local key=$(echo "$dir" | head -1)
