@@ -7,10 +7,10 @@ function cd() {
     local original_dir="$(pwd)"
     
     while true; do
-        # local lsd=$(ls -ap | grep '/$' | sed 's;/$;;')
-        local lsd=$(ls -ap | grep '/$' | grep -vE '^\./?$|^\.\./?$' | sed 's;/$;;') # exclude . and ..
+        # local lsd=$(ls -ap | grep '/$' | grep -vE '^\./?$|^\.\./?$' | sed 's;/$;;') # exclude . and ..
+        local lsd=$(ls -ap | grep -vE '^\./?$|^\.\./?$') # exclude . and ..
         local dir="$(printf '%s\n' "${lsd[@]}" |
-            FZF_DEFAULT_OPTS="--height 40% --layout=reverse --prompt='$(pwd)/'" \
+            FZF_DEFAULT_OPTS="--height 40% --layout=reverse --prompt='$(pwd)/' --preview 'fzf-preview.sh {}'" \
             fzf --expect=ctrl-w,esc)"
         
         # Extract the selected directory and key press event
