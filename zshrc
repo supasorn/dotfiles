@@ -213,7 +213,8 @@ if [ -f "$FZFCD" ]; then
     source "$FZFCD"
 fi
 
-if [[ $hn == "ROG504" ]]; then
+if [[ $hn == "rog" ]]; then
+  export PATH="/opt/nvim-linux64/bin:$PATH"
   tf-term() {
     tmux new-session \; \
     send-keys "$@" C-m \; \
