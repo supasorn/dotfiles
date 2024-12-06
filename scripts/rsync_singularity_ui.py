@@ -18,8 +18,8 @@ paths = [
     "pure-c2:/mnt/data/supasorn/singularity/",
     "v21:/home2/supasorn/singularity/",
     "v23:/home2/supasorn/singularity/",
-    "10.204.100.61:/ist-nas/users/supasorn/singularity/",
-    "10.204.100.61:/ist/users/supasorn/singularity/"
+    "_:/ist-nas/users/supasorn/singularity/",
+    "_:/ist/users/supasorn/singularity/"
 ]
 
 selected_path = None
@@ -96,17 +96,25 @@ def main(paths):
     print("\nSelected Paths:")
     for path, selection in selected_paths:
         host, target_path = path.split(":", 1)
+        if host == '_':
+            host = ""
+        else:
+            host += ":"
         if selection & 3:
             rsync_extra_args = "--delete" if selection & 2 else ""
-            command = f"rsync -avh {rsync_extra_args} {host}:{target_path} {selected_path}"
+            command = f"rsync -avh {rsync_extra_args} {host}{target_path} {selected_path}"
             print(command)
             os.system(command)
 
     for path, selection in selected_paths:
         host, target_path = path.split(":", 1)
+        if host == '_':
+            host = ""
+        else:
+            host += ":"
         if selection & 12:
             rsync_extra_args = "--delete" if selection & 8 else ""
-            command = f"rsync -avh {rsync_extra_args} {selected_path} {host}:{target_path}"
+            command = f"rsync -avh {rsync_extra_args} {selected_path} {host}{target_path}"
             print(command)
             os.system(command)
 
