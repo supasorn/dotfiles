@@ -7,26 +7,34 @@ function cd() {
     local original_dir="$(pwd)"
     
     while true; do
-        # local lsd=$(ls -ap | grep '/$' | grep -vE '^\./?$|^\.\./?$' | sed 's;/$;;') # exclude . and ..
         local lsd=$(ls -ap | grep -vE '^\./?$|^\.\./?$') # exclude . and ..
-        local dir="$(printf '%s\n' "${lsd[@]}" |
+        local output="$(printf '%s\n' "${lsd[@]}" |
             FZF_DEFAULT_OPTS="--height 40% --layout=reverse --prompt='$(pwd)/' --preview 'fzf-preview.sh {}'" \
-            fzf --expect=ctrl-w,esc)"
+            fzf --print-query --expect=ctrl-w,esc)"
         
         # Extract the selected directory and key press event
-        local key=$(echo "$dir" | head -1)
-        local selected_dir=$(echo "$dir" | tail -n +2)
+        local search_query=$(echo "$output" | sed -n '1p')  # First line is search query
+        local key=$(echo "$output" | sed -n '2p')          # Second line is key event (if any)
+        local selected_dir=$(echo "$output" | sed -n '3p')
+        # echo "search_query: $search_query"
+        # echo "key: $key"
+        # echo "selected_dir: $selected_dir"
 
-        # If ESC is pressed, revert to the original directory and exit
         if [[ "$key" == "esc" ]]; then
             builtin cd "$original_dir"
             return 0
         fi
 
-        # If Ctrl-W is pressed, go up one level
+        # If Ctrl-W ggis pressed
         if [[ "$key" == "ctrl-w" ]]; then
-            builtin cd ..
-            continue
+            # if [[ -z "$selected_dir" ]]; then
+            # echo "search_query: $search_query"
+            # if search query is empty, go up one level
+            if [[ -z "$search_query" ]]; then
+                builtin cd ..
+            else
+                continue
+            fi
         fi
 
         # If a directory was selected, change to that directory

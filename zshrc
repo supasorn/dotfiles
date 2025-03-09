@@ -184,6 +184,7 @@ source-git https://github.com/changyuheng/zsh-interactive-cd.git
 source-git https://github.com/zsh-users/zsh-autosuggestions.git 
 source-git https://github.com/hchbaw/zce.zsh.git  # easy motion
 source-git https://github.com/urbainvaes/fzf-marks
+source-git https://github.com/zsh-users/zsh-syntax-highlighting
 
 bindkey '^[[Z' autosuggest-accept
 bindkey '^f' zce
