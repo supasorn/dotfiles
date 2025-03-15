@@ -154,6 +154,8 @@ alias rgf='rg --files | rg'
 alias rg1="rg --max-depth=1"
 
 alias pdf='cd /Users/supasorn/projects/pdf_signer; source ~/Projects/forex/venv_forex/bin/activate; python3 multisign.py'
+
+alias s="ssh -R 52698:localhost:22 "
 # alias pdf='cd /Users/supasorn/projects/pdf_signer; python3 multisign.py'
 
 fshere() {
@@ -275,6 +277,73 @@ load_nvm() {
 if [[ -z $SINGULARITY_NAME ]]; then
   load_nvm
 fi
+
+
+ss -tnp | grep ':22 ' | awk '{print $4}' | cut -d: -f1 | head -n 1
+
+function vsc() {
+  # Try ss first (modern systems)
+  if command -v ss &>/dev/null; then
+      server_ip=$(ss -tnp | grep ':22 ' | awk '{print $4}' | cut -d: -f1 | head -n 1)
+  fi
+
+  # Final check: If no IP found, exit with error
+  if [[ -z "$server_ip" ]]; then
+      echo "Error: Unable to detect server IP."
+      return 1
+  fi
+
+  ssh -p 52698 localhost "/usr/local/bin/code --remote ssh-remote+$(whoami)@$server_ip $(pwd)"
+}
+
+function finder() {
+    # Try ss first (modern systems)
+    if command -v ss &>/dev/null; then
+        server_ip=$(ss -tnp | grep ':22 ' | awk '{print $4}' | cut -d: -f1 | head -n 1)
+    fi
+
+    # Final check: If no IP found, exit with error
+    if [[ -z "$server_ip" ]]; then
+        echo "Error: Unable to detect server IP."
+        return 1
+    fi
+
+
+    # Get the absolute path of the current directory
+    absolute_path=$(pwd)
+
+    # Convert absolute path into a valid folder name by replacing '/' with '_'
+    sanitized_path=$(echo "$absolute_path" | sed 's#/#_#g')
+
+    # Define the mount point on Mac using server IP and sanitized path
+    mount_point="/Users/supasorn/mnt/${server_ip}${sanitized_path}"
+
+    # Run SSH command on Mac to handle mount
+    ssh -p 52698 localhost "
+        # Ensure the mount directory exists
+        mkdir -p '$mount_point'
+
+        # Check if the mount point is already mounted
+        if mount | grep -q \"\$mount_point\"; then
+            echo 'Unmounting stale connection...'
+            umount '$mount_point'
+        fi
+
+        # Mount the remote directory
+        echo 'Mounting $server_ip:$(pwd) to $mount_point'
+        /usr/local/bin/sshfs $server_ip:$(pwd) '$mount_point' -o volname=\"${server_ip}${sanitized_path}\",reconnect,IdentityFile=~/.ssh/id_rsa
+
+        # Open Finder if the mount was successful
+        if mount | grep -q \"\$mount_point\"; then
+            echo 'Opening Finder...'
+            open '$mount_point'
+        else
+            echo 'Mount failed!'
+        fi
+    "
+}
+
+
 
 
 source ~/dotfiles/blinks_singularity.zsh-theme
