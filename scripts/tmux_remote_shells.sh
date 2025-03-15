@@ -57,13 +57,13 @@ for i in $(seq 0 $(($total_nodes - 1))); do
 
     # Create a new tmux window for the first host
     if [ $i -eq 0 ]; then
-        tmux send-keys -t "$tmux_session" "ssh $host" C-m
+        tmux send-keys -t "$tmux_session" "ssh -R 52698:localhost:22 $host" C-m
     else
         # Split the window and navigate appropriately
         if (( $i % cols == 0 )); then
-            tmux split-window -h -t "$tmux_session" "ssh $host"
+            tmux split-window -h -t "$tmux_session" "ssh -R 52698:localhost:22 $host"
         else
-            tmux split-window -v -t "$tmux_session" "ssh $host"
+            tmux split-window -v -t "$tmux_session" "ssh -R 52698:localhost:22 $host"
         fi
         # Balance the layout after each split
         tmux select-layout -t "$tmux_session" tiled

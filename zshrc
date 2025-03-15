@@ -155,7 +155,7 @@ alias rg1="rg --max-depth=1"
 
 alias pdf='cd /Users/supasorn/projects/pdf_signer; source ~/Projects/forex/venv_forex/bin/activate; python3 multisign.py'
 
-alias s="ssh -R 52698:localhost:22 "
+alias ssh="ssh -R 52698:localhost:22 "
 # alias pdf='cd /Users/supasorn/projects/pdf_signer; python3 multisign.py'
 
 fshere() {
