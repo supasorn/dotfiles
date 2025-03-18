@@ -283,7 +283,13 @@ if [[ $hn != "ssmb.local" ]]; then
   function get_corrected_pwd() {
     local current_pwd=$PWD  
     if [[ -n "$SINGULARITY_NAME" || -n "$SINGULARITY_CONTAINER" ]]; then
-      echo "${current_pwd#/host}"
+      if [[ "$current_pwd" == /host* ]]; then
+        echo "${current_pwd#/host}"
+      elif [[ "$current_pwd" == /projects* ]]; then
+        echo "/ist-nas/users/supasorn${current_pwd}"
+      else
+        echo "$current_pwd"
+      fi
     else
       echo "$current_pwd"
     fi
