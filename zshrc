@@ -280,6 +280,15 @@ fi
 
 # if not ssmb.local, run this
 if [[ $hn != "ssmb.local" ]]; then
+  function get_corrected_pwd() {
+    local current_pwd=$PWD  
+    if [[ -n "$SINGULARITY_NAME" || -n "$SINGULARITY_CONTAINER" ]]; then
+      echo "${current_pwd#/host}"
+    else
+      echo "$current_pwd"
+    fi
+  }
+
   function vsc() {
     # Try ss first (modern systems)
     if command -v ss &>/dev/null; then
@@ -292,7 +301,7 @@ if [[ $hn != "ssmb.local" ]]; then
         return 1
     fi
 
-    ssh -p 52698 localhost "/usr/local/bin/code --remote ssh-remote+$(whoami)@$server_ip $(pwd)"
+    ssh -p 52698 localhost "/usr/local/bin/code --remote ssh-remote+$(whoami)@$server_ip $(get_corrected_pwd)"
   }
 
   function finder() {
@@ -309,7 +318,7 @@ if [[ $hn != "ssmb.local" ]]; then
 
 
       # Get the absolute path of the current directory
-      absolute_path=$(pwd)
+      absolute_path=$(get_corrected_pwd)
 
       # Convert absolute path into a valid folder name by replacing '/' with '_'
       sanitized_path=$(echo "$absolute_path" | sed 's#/#_#g')
@@ -329,8 +338,8 @@ if [[ $hn != "ssmb.local" ]]; then
           fi
 
           # Mount the remote directory
-          echo 'Mounting $server_ip:$(pwd) to $mount_point'
-          /usr/local/bin/sshfs $server_ip:$(pwd) '$mount_point' -o volname=\"${server_ip}${sanitized_path}\",reconnect,IdentityFile=~/.ssh/id_rsa
+          echo 'Mounting $server_ip:$absolute_path to $mount_point'
+          /usr/local/bin/sshfs $server_ip:$absolute_path '$mount_point' -o volname=\"${server_ip}${sanitized_path}\",reconnect,IdentityFile=~/.ssh/id_rsa
 
           # Open Finder if the mount was successful
           if mount | grep -q \"\$mount_point\"; then
