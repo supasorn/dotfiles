@@ -143,7 +143,7 @@ spaces() {
 }
 
 alias gp="~/dotfiles/scripts/gitpull.sh"
-alias rs="python ~/dotfiles/scripts/rsync_singularity_ui.py"
+alias rs="sudo -E python ~/dotfiles/scripts/rsync_singularity_ui.py"
 
 alias tm="tmux -u"
 alias tma="tmux -u a"
