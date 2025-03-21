@@ -295,7 +295,8 @@ if [[ $hn != "ssmb.local" ]]; then
     fi
   }
   function sshCopyIdIfNeeded() {
-    if [[ $(ssh -o BatchMode=yes -o ConnectTimeout=5 -p "$PORT" "$USER@$HOST" 'echo ok' 2>/dev/null) != "ok" ]]; then
+    if [[ $(ssh -o BatchMode=yes -o ConnectTimeout=5 -p 52698 localhost 'echo ok' 2>/dev/null) != "ok" ]]; then
+      echo "Copying SSH key to -p 52698 localhost..."
       ssh-copy-id -p 52698 localhost
     fi
   }
