@@ -294,6 +294,11 @@ if [[ $hn != "ssmb.local" ]]; then
       echo "$current_pwd"
     fi
   }
+  function sshCopyIdIfNeeded() {
+    if [[ $(ssh -o BatchMode=yes -o ConnectTimeout=5 -p "$PORT" "$USER@$HOST" 'echo ok' 2>/dev/null) != "ok" ]]; then
+      ssh-copy-id -p 52698 localhost
+    fi
+  }
 
   function vsc() {
     # Try ss first (modern systems)
@@ -306,6 +311,7 @@ if [[ $hn != "ssmb.local" ]]; then
         echo "Error: Unable to detect server IP."
         return 1
     fi
+    sshCopyIdIfNeeded
 
     ssh -p 52698 localhost "/usr/local/bin/code --remote ssh-remote+$(whoami)@$server_ip $(get_corrected_pwd)"
   }
@@ -332,6 +338,7 @@ if [[ $hn != "ssmb.local" ]]; then
       # Define the mount point on Mac using server IP and sanitized path
       mount_point="/Users/supasorn/mnt/${server_ip}${sanitized_path}"
 
+      sshCopyIdIfNeeded
       # Run SSH command on Mac to handle mount
       ssh -p 52698 localhost "
           # Ensure the mount directory exists
