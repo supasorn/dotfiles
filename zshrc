@@ -304,7 +304,8 @@ if [[ $hn != "ssmb.local" ]]; then
   function vsc() {
     # Try ss first (modern systems)
     if command -v ss &>/dev/null; then
-        server_ip=$(ss -tnp | grep ':22 ' | awk '{print $4}' | cut -d: -f1 | head -n 1)
+        # server_ip=$(ss -tnp | grep ':22 ' | awk '{print $4}' | cut -d: -f1 | head -n 1)
+        server_ip=$(ss -tnp | awk '$4 ~ /:22$/ { split($4, a, ":"); print a[1]; exit }')
     fi
 
     # Final check: If no IP found, exit with error
