@@ -143,7 +143,16 @@ spaces() {
 }
 
 alias gp="~/dotfiles/scripts/gitpull.sh"
-alias rs="sudo -E python ~/dotfiles/scripts/rsync_singularity_ui.py"
+# alias rs="sudo -E python ~/dotfiles/scripts/rsync_singularity_ui.py"
+runfavs() {
+  local cmd
+  cmd=$(cat ~/dotfiles/commands.txt | fzf --prompt="Run: " --height=20% --reverse)
+  if [ -n "$cmd" ]; then
+      echo ">> $cmd"
+      eval "$cmd"
+  fi
+}
+alias r="runfavs"
 
 alias tm="tmux -u"
 alias tma="tmux -u a"

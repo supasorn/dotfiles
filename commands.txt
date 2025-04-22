@@ -1,0 +1,4 @@
+sudo rsync -avh /ist-nas/users/supasorn/singularity_slim/ /ist/users/supasorn/singularity_slim/
+sudo rsync -avh --delete /ist-nas/users/supasorn/singularity_slim/ /ist/users/supasorn/singularity_slim/
+sudo rsync -avh /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
+sudo rsync -avh --delete /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
