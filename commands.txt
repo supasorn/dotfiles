@@ -2,3 +2,5 @@ sudo rsync -avh /ist-nas/users/supasorn/singularity_slim/ /ist/users/supasorn/si
 sudo rsync -avh --delete /ist-nas/users/supasorn/singularity_slim/ /ist/users/supasorn/singularity_slim/
 sudo rsync -avh /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
 sudo rsync -avh --delete /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
+# go to comfy ui \ source ~/miniconda3/bin/activate; conda activate /conda_envs/default; cd /projects/ComfyUI 
+source ~/miniconda3/bin/activate; conda activate /conda_envs/default
