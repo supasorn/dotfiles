@@ -152,18 +152,38 @@ alias gp="~/dotfiles/scripts/gitpull.sh"
       # eval "$cmd"
   # fi
 # }
+
 runfavs() {
-  local cmd
-  cmd=$(cat ~/dotfiles/commands.txt | fzf --prompt="Run: " --height=20% --reverse)
-  if [ -n "$cmd" ]; then
-      echo ">> $cmd"
-      if [ -n "$ZSH_VERSION" ]; then
-          print -s -- "$cmd"
-      elif [ -n "$BASH_VERSION" ]; then
-          history -s "$cmd"
-      fi
-      eval "$cmd"
-  fi
+    local rawcmd cmd
+    rawcmd=$(< ~/dotfiles/commands.txt fzf --prompt="Run: " --height=20% --reverse)
+    [[ -z $rawcmd ]] && return 0
+
+    # if command ends with $, strip it and enter “interactive” mode
+    if [[ $rawcmd == *\$ ]]; then
+        cmd=${rawcmd%\$}                    # drop the trailing $
+        if [[ -n $ZSH_VERSION ]]; then
+            # zsh: push into the editing buffer
+            print -z -- "$cmd"
+        elif [[ -n $BASH_VERSION ]]; then
+            # bash: show it and remind to recall
+            echo "$cmd"
+            echo "(press ↑ to recall this line, edit as needed, then ENTER)"
+        else
+            # fallback: just echo it
+            echo "$cmd"
+        fi
+        return 0
+    fi
+
+    # otherwise proceed as before
+    cmd=$rawcmd
+    echo ">> $cmd"
+    if [[ -n $ZSH_VERSION ]]; then
+        print -s -- "$cmd"
+    elif [[ -n $BASH_VERSION ]]; then
+        history -s "$cmd"
+    fi
+    eval "$cmd"
 }
 alias r="runfavs"
 
