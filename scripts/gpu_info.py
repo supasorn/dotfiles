@@ -41,7 +41,7 @@ def color_bar(used, total, bar_width=20):
         color = "\033[91m"  # Red
     reset = "\033[0m"
 
-    bar = f"{color}{'█' * filled_length}{' ' * empty_length}{reset} {percent_display}"
+    bar = f"{percent_display} {color}{'█' * filled_length}{' ' * empty_length}{reset}"
     return bar
 
 def strip_ansi(s):
@@ -88,11 +88,11 @@ def get_gpu_processes():
                 # Convert MiB to GB
                 mem_used_gb = mem_used_mb / 1024
                 mem_total_gb = mem_total_mb / 1024
-                used_display = f"{mem_used_gb:.1f} GB"
-                total_display = f"{mem_total_gb:.1f} GB"
+                used_display = f"{mem_used_gb:.1f}"
+                total_display = f"{mem_total_gb:.1f}"
 
                 # GPU # column: format as "0: NVIDIA ..."
-                gpu_display = f"{gpu_index}: {gpu_name.replace('NVIDIA ', '')}"
+                gpu_display = f"{gpu_index}: {gpu_name.replace('NVIDIA ', '').replace('GeForce ', '')}"
 
                 # Only show RAM/bar once per GPU
                 if gpu_index not in shown_gpu_indices:
@@ -119,7 +119,7 @@ def get_gpu_processes():
             print(f"+{separator}+")
             for i, row in enumerate(table_rows):
                 row_str = '|'.join(
-                    f" {str(cell).ljust(col_widths[j])} " for j, cell in enumerate(row)
+                    f" {str(cell).rjust(col_widths[j]) if j in [4,5] else str(cell).ljust(col_widths[j])} " for j, cell in enumerate(row)
                 )
                 print(f"|{row_str}|")
                 if i == 0:
