@@ -8,3 +8,4 @@
 : nas->ist_DEL; sudo rsync -avh --delete /ist-nas/users/supasorn/singularity_slim/ /ist/users/supasorn/singularity_slim/
 : ist->nas; sudo rsync -avh /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
 : ist->nas_DEL; sudo rsync -avh --delete /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
+: download; curl -SL -O $
