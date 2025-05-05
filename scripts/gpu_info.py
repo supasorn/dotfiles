@@ -141,7 +141,7 @@ def get_gpu_processes():
     print(hdr)
     print(sep_eq)
     for r in rows:
-        if r[0] != '':
+        if r[0] != '' and r != rows[0]:
             print(sep)
         line = '|' + '|'.join(
             f" {str(r[j]).rjust(widths[j])} " if j in [1, 3, 5] else f" {str(r[j]).ljust(widths[j])} "
@@ -149,7 +149,7 @@ def get_gpu_processes():
         ) + '|'
         print(line)
         # separate GPU blocks
-    print()
+    print(sep)
 
 def get_gpu_process_users():
     users_map = {}
