@@ -11,6 +11,9 @@ def get_gpu_uuid_to_info():
              '--query-gpu=index,uuid,name,memory.used,memory.total',
              '--format=csv,noheader,nounits'],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if result.returncode != 0:
+            raise RuntimeError(f"{result.stdout}")
+
         for line in result.stdout.splitlines():
             line = line.strip()
             if not line:
@@ -23,7 +26,7 @@ def get_gpu_uuid_to_info():
                 'total_mb': int(total_mb),
             }
     except Exception as e:
-        print(e.stdout)
+        print(e)
     return uuid_to_info
 
 def color_bar(used, total, width=20):
