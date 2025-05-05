@@ -42,7 +42,7 @@ def color_bar(used, total, width=20):
 def strip_ansi(s):
     return re.sub(r'\x1B\[[0-?]*[ -/]*[@-~]', '', s)
 
-def truncate_prefix(s: str, max_len: int = 30) -> str:
+def truncate_prefix(s: str, max_len: int = 40) -> str:
     # if it's already short enough, just return it
     if len(s) <= max_len:
         return s
@@ -81,7 +81,7 @@ def get_gpu_processes():
         pass
 
     # Prepare table structure
-    headers = ['GPU', 'Usage GB', 'User', 'Mem', 'Process Name', 'PID']
+    headers = ['GPU', 'Usage %GB', 'User', '  GB', 'Process Name', 'PID']
     rows = []
 
     # Iterate GPUs in index order
@@ -94,10 +94,11 @@ def get_gpu_processes():
 
         pct = (used_mb / total_mb) * 100 if total_mb else 0
         pct = max(0, min(round(pct), 100))
-
+        if pct == 100:
+            pct = 99
         # usage_str = colorUsedVRAM(pct) + f"{used_gb:4.1f} / {tot_gb:2.0f}GB " \
                     # + color_bar(used_mb, total_mb)
-        usage_str = colorUsedVRAM(pct) + f" {used_gb:4.1f}/{round(total_mb / 1024):2.0f}"
+        usage_str = colorUsedVRAM(pct) + f" {used_gb:4.1f}/" + colorTotalVRAM(round(total_mb / 1024))
                     
 
         procs = proc_map.get(uuid, [])
@@ -108,8 +109,8 @@ def get_gpu_processes():
                 f"{idx}: {name}",
                 usage_str,
                 first['user'],
-                f"{first['used_mb']/1024:4.1f}G",
-                truncate_prefix(first['pname'], 30),
+                f"{first['used_mb']/1024:4.1f}",
+                truncate_prefix(first['pname']),
                 first['pid'],
             ])
             # subsequent processes indent GPU/Usage columns
@@ -118,8 +119,8 @@ def get_gpu_processes():
                     '',
                     '',
                     p['user'],
-                    f"{p['used_mb']/1024:4.1f}G",
-                    p['pname'],
+                    f"{p['used_mb']/1024:4.1f}",
+                    truncate_prefix(p['pname']),
                     p['pid'],
                 ])
         else:
@@ -238,8 +239,8 @@ def print_vram_usage(mem_thresh=15, show_spec=False):
     out += ' ' + ' | '.join(f"{i}:{u}" for i, u in zip(idx_list, user_items))
 
     # append spec
-    out += "\n"
     if show_spec:
+        out += "\n"
         out += ' '.join(vram_items)
         # out += ' :' + ' '.join(vram_items)
         out += ' ' + ' | '.join(spec_items)
