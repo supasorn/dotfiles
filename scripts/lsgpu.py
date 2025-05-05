@@ -19,7 +19,7 @@ else:
 cluster_status = {cluster: "waiting" for cluster in clusters}
 console = Console()
 
-SCRIPT_PATH = Path.home() / "dotfiles" / "scripts" / "gpu_info3.py"
+SCRIPT_PATH = Path(__file__).resolve().parent / "gpu_info.py"
 
 def showGPUs_fn(cluster):
     # build the ssh command
@@ -29,8 +29,7 @@ def showGPUs_fn(cluster):
         "python3",       # or just "python" if that's what your remote uses
         "-u",            # unbuffered
         "-",             # read program from stdin
-        "--ram",         # your script's flags
-        "--user",
+        "--compact",         # your script's flags
         # "--spec",
     ]
 
