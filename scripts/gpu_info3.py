@@ -16,9 +16,6 @@ def get_gpu_uuid_to_info():
             idx, uuid, name, used_mb, total_mb = [p.strip() for p in line.split(',')]
             uuid_to_info[uuid] = (int(idx), name, int(used_mb), int(total_mb))
     except Exception as e:
-        # print stderr
-        print(f"Error retrieving GPU info: {e}")
-        print(e.stderr)
         print(e.stdout)
 
     return uuid_to_info
@@ -44,8 +41,6 @@ def get_gpu_process_users():
             if user:
                 users_map.setdefault(gpu_uuid, set()).add(user)
     except Exception as e:
-        print(f"Error retrieving GPU info: {e}")
-        print(e.stderr)
         print(e.stdout)
     return users_map
 
