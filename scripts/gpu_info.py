@@ -42,6 +42,14 @@ def color_bar(used, total, width=20):
 def strip_ansi(s):
     return re.sub(r'\x1B\[[0-?]*[ -/]*[@-~]', '', s)
 
+def truncate_prefix(s: str, max_len: int = 30) -> str:
+    # if it's already short enough, just return it
+    if len(s) <= max_len:
+        return s
+    # otherwise take the last (max_len-3) chars and prepend "..."
+    return '...' + s[-(max_len - 3):]
+
+
 def get_gpu_processes():
     info = get_gpu_uuid_to_info()
 
@@ -101,7 +109,7 @@ def get_gpu_processes():
                 usage_str,
                 first['user'],
                 f"{first['used_mb']/1024:4.1f}G",
-                first['pname'],
+                truncate_prefix(first['pname'], 30),
                 first['pid'],
             ])
             # subsequent processes indent GPU/Usage columns
