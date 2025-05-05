@@ -298,6 +298,7 @@ else
   alias run="python3 /home/supasorn/cluster_utils/singularitylauncher.py"
   alias ul="tmux a -t UL"
 fi
+alias sg='python /ist-nas/users/supasorn/singularity_slim/run.py'
 
 source ~/.vim/export_lf_icons.sh 2> /dev/null 
 
