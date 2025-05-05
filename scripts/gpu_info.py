@@ -83,14 +83,13 @@ def get_gpu_processes():
         used_mb = g['used_mb']
         total_mb = g['total_mb']
         used_gb = used_mb / 1024
-        tot_gb = total_mb / 1024
 
         pct = (used_mb / total_mb) * 100 if total_mb else 0
         pct = max(0, min(round(pct), 100))
 
         # usage_str = colorUsedVRAM(pct) + f"{used_gb:4.1f} / {tot_gb:2.0f}GB " \
                     # + color_bar(used_mb, total_mb)
-        usage_str = colorUsedVRAM(pct) + f" {used_gb:3.1f}/{tot_gb:2.0f}"
+        usage_str = colorUsedVRAM(pct) + f" {used_gb:4.1f}/{round(total_mb / 1024):2.0f}"
                     
 
         procs = proc_map.get(uuid, [])
