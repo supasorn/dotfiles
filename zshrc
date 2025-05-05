@@ -299,7 +299,7 @@ else
   alias ul="tmux a -t UL"
 fi
 alias sg='python /ist-nas/users/supasorn/singularity_slim/run.py'
-alias ns='python ~/dotfiles/scripts/gpu_info.py'
+alias ns='python ~/dotfiles/scripts/lsgpu.py --local'
 alias lsgpu='python ~/dotfiles/scripts/lsgpu.py'
 
 source ~/.vim/export_lf_icons.sh 2> /dev/null 

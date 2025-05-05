@@ -334,6 +334,27 @@ def print_vram_usage(mem_thresh, show_spec=False):
 
     print(out)
 
+
+def expand_nodes(nodes_str: str):
+    out = []
+    for part in nodes_str.split(','):
+        part = part.strip()
+        if '-' in part:
+            start, end = part.split('-', 1)
+            # extract the non-digit prefix and the numeric suffix
+            m1 = re.match(r'([^\d]+)(\d+)$', start)
+            m2 = re.match(r'([^\d]+)(\d+)$', end)
+            if m1 and m2 and m1.group(1) == m2.group(1):
+                prefix = m1.group(1)
+                s = int(m1.group(2))
+                e = int(m2.group(2))
+                # build v2, v3, …, v5
+                out.extend(f"{prefix}{i}" for i in range(s, e+1))
+                continue
+        # fallback: just append whatever it was
+        out.append(part)
+    return out
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
@@ -353,7 +374,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.nodes:
-        clusters = [x.strip() for x in  args.nodes.split(",")]
+        clusters = expand_nodes(args.nodes)
+
 
     cluster_status = {cluster: "waiting" for cluster in clusters}
 
