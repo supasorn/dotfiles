@@ -141,14 +141,14 @@ def get_gpu_processes():
     print(hdr)
     print(sep_eq)
     for r in rows:
+        if r[0] != '':
+            print(sep)
         line = '|' + '|'.join(
             f" {str(r[j]).rjust(widths[j])} " if j in [1, 3, 5] else f" {str(r[j]).ljust(widths[j])} "
             for j in range(len(headers))
         ) + '|'
         print(line)
         # separate GPU blocks
-        if r[0] != '':
-            print(sep)
     print()
 
 def get_gpu_process_users():
