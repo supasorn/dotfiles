@@ -41,7 +41,7 @@ def get_gpu_process_users():
             if user:
                 users_map.setdefault(gpu_uuid, set()).add(user)
     except Exception as e:
-        print(e.stdout)
+        pass
     return users_map
 
 def print_vram_usage(mem_thresh=15, show_user=False, show_spec=False):
