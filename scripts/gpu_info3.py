@@ -19,6 +19,7 @@ def get_gpu_uuid_to_info():
         # print stderr
         print(f"Error retrieving GPU info: {e}")
         print(e.stderr)
+        print(e.stdout)
 
     return uuid_to_info
 
@@ -45,6 +46,7 @@ def get_gpu_process_users():
     except Exception as e:
         print(f"Error retrieving GPU info: {e}")
         print(e.stderr)
+        print(e.stdout)
     return users_map
 
 def print_vram_usage(mem_thresh=15, show_user=False, show_spec=False):
