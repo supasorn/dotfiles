@@ -10,6 +10,7 @@ from multiprocessing import Pool
 from rich import box
 from rich.spinner import Spinner
 from pathlib import Path
+import sys
 
 if "clusters" not in os.environ:
   clusters = ["v%d" % i for i in range(1, 24)]
@@ -30,6 +31,7 @@ def showGPUs_fn(cluster):
         "-u",            # unbuffered
         "-",             # read program from stdin
         "--compact",         # your script's flags
+        *sys.argv[1:],  # pass any args to the script
         # "--spec",
     ]
 
