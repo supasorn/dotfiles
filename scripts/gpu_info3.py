@@ -15,8 +15,8 @@ def get_gpu_uuid_to_info():
         for line in result.stdout.splitlines():
             idx, uuid, name, used_mb, total_mb = [p.strip() for p in line.split(',')]
             uuid_to_info[uuid] = (int(idx), name, int(used_mb), int(total_mb))
-    except subprocess.CalledProcessError:
-        pass
+    except Exception as e:
+        print(f"Error retrieving GPU info: {e}")
     return uuid_to_info
 
 def get_gpu_process_users():
@@ -39,8 +39,8 @@ def get_gpu_process_users():
             user = user_res.stdout.strip()
             if user:
                 users_map.setdefault(gpu_uuid, set()).add(user)
-    except subprocess.CalledProcessError:
-        pass
+    except Exception as e:
+        print(f"Error retrieving GPU info: {e}")
     return users_map
 
 def print_vram_usage(mem_thresh=15, show_user=False, show_spec=False):
