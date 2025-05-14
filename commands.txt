@@ -9,3 +9,5 @@
 : ist->nas; sudo rsync -avh /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
 : ist->nas_DEL; sudo rsync -avh --delete /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
 : download; curl -SL -O $
+: dwui; CUDA_VISIBLE_DEVICES=1 sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default; cd /projects/stable-diffusion-webui; ./webui.sh --gradio-auth-path pw.txt --disable-safe-unpickle --listen"
+

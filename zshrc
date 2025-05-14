@@ -192,7 +192,7 @@ alias tma="tmux -u a"
 
 alias lss="ls -lahrS"
 
-alias rgf='rg --files | rg'
+alias rgf='rg --files --no-ignore | rg'
 alias rg1="rg --max-depth=1"
 
 alias pdf='cd /Users/supasorn/projects/pdf_signer; source ~/Projects/forex/venv_forex/bin/activate; python3 multisign.py'
