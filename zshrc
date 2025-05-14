@@ -350,7 +350,9 @@ if [[ $hn != "ssmb.local" ]]; then
     # Try ss first (modern systems)
     if command -v ss &>/dev/null; then
         # server_ip=$(ss -tnp | grep ':22 ' | awk '{print $4}' | cut -d: -f1 | head -n 1)
-        server_ip=$(ss -tnp | awk '$4 ~ /:22$/ { split($4, a, ":"); print a[1]; exit }')
+        # server_ip=$(ss -tnp | awk '$4 ~ /:22$/ { split($4, a, ":"); print a[1]; exit }')
+        server_ip=$(printf '%s\n' "$SSH_CONNECTION" | awk '{print $3}')
+
     fi
 
     # Final check: If no IP found, exit with error
@@ -366,7 +368,9 @@ if [[ $hn != "ssmb.local" ]]; then
   function finder() {
       # Try ss first (modern systems)
       if command -v ss &>/dev/null; then
-          server_ip=$(ss -tnp | grep ':22 ' | awk '{print $4}' | cut -d: -f1 | head -n 1)
+          # server_ip=$(ss -tnp | grep ':22 ' | awk '{print $4}' | cut -d: -f1 | head -n 1)
+          server_ip=$(printf '%s\n' "$SSH_CONNECTION" | awk '{print $3}')
+
       fi
 
       # Final check: If no IP found, exit with error
