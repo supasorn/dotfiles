@@ -9,5 +9,7 @@
 : ist->nas; sudo rsync -avh /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
 : ist->nas_DEL; sudo rsync -avh --delete /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/ 
 : download; curl -SL -O $
-: dwui; CUDA_VISIBLE_DEVICES=1 sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default; cd /projects/stable-diffusion-webui; ./webui.sh --gradio-auth-path pw.txt --disable-safe-unpickle --listen"
+: dwui; sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default; cd /projects/stable-diffusion-webui; CUDA_VISIBLE_DEVICES=1 ./webui.sh --gradio-auth-path pw.txt --disable-safe-unpickle --listen"
+
+: depth_anything; sg --cmd "source ~/miniconda3/bin/activate /conda_envs/video_depth_anything; cd /projects/DAVDA; CUDA_VISIBLE_DEVICES=0 python run.py --image --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/"
 
