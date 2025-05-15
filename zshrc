@@ -154,37 +154,30 @@ alias gp="~/dotfiles/scripts/gitpull.sh"
 # }
 
 runfavs() {
-    local rawcmd cmd
-    rawcmd=$(< ~/dotfiles/commands.txt fzf --prompt="Run: " --height=20% --reverse)
+    local raw key rawcmd cmd
+
+    # let fzf return both the key pressed and the selection
+    raw=$(fzf --expect=ctrl-e,enter --prompt="Run: " --height=20% --reverse < ~/dotfiles/commands.txt)
+    [[ -z $raw ]] && return 0
+
+    key=$(head -n1 <<< "$raw")
+    rawcmd=$(tail -n +2 <<< "$raw")
     [[ -z $rawcmd ]] && return 0
 
-    # if command ends with $, strip it and enter “interactive” mode
-    if [[ $rawcmd == *\$ ]]; then
-        cmd=${rawcmd%\$}                    # drop the trailing $
-        if [[ -n $ZSH_VERSION ]]; then
-            # zsh: push into the editing buffer
-            print -z -- "$cmd"
-        elif [[ -n $BASH_VERSION ]]; then
-            # bash: show it and remind to recall
-            echo "$cmd"
-            echo "(press ↑ to recall this line, edit as needed, then ENTER)"
-        else
-            # fallback: just echo it
-            echo "$cmd"
-        fi
+    # if Ctrl-E pressed (or you still have the old `$` hack), drop into edit mode
+    if [[ $key == ctrl-e ]] || [[ $rawcmd == *\$ ]]; then
+        cmd=${rawcmd%\$}                        # strip trailing $, if any
+          print -z -- "$cmd"                  # push into Zsh edit buffer
         return 0
     fi
 
-    # otherwise proceed as before
+    # otherwise run it straight
     cmd=$rawcmd
     echo ">> $cmd"
-    if [[ -n $ZSH_VERSION ]]; then
-        print -s -- "$cmd"
-    elif [[ -n $BASH_VERSION ]]; then
-        history -s "$cmd"
-    fi
+    print -s -- "$cmd"
     eval "$cmd"
 }
+
 alias r="runfavs"
 
 alias tm="tmux -u"
