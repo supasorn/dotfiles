@@ -8,5 +8,6 @@
 : download; curl -SL -O $
 : dwui; sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default; cd /projects/stable-diffusion-webui; CUDA_VISIBLE_DEVICES=1 ./webui.sh --gradio-auth-path pw.txt --disable-safe-unpickle --listen"
 : depth_anything; sg --cmd "source ~/miniconda3/bin/activate /conda_envs/video_depth_anything; cd /projects/DAVDA; CUDA_VISIBLE_DEVICES=0 python run.py --image --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/"
+: video_depth_anything; sg --cmd "source ~/miniconda3/bin/activate /conda_envs/video_depth_anything; cd /projects/DAVDA; CUDA_VISIBLE_DEVICES=0 python run.py --video --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/"
 : framepack; sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default; cd /projects/FramePack; CUDA_VISIBLE_DEVICES=0 python demo_gradio.py --server 0.0.0.0 --port 9875" 
-
+: mntv3: mkdir -p ~/mnt/v3; sshfs -o IdentityFile=~/.ssh/id_rsa -o idmap=user v3:/ ~/mnt/v3
