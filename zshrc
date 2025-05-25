@@ -157,7 +157,7 @@ runfavs() {
     local raw key rawcmd cmd
 
     # let fzf return both the key pressed and the selection
-    raw=$(fzf --expect=ctrl-e,enter --prompt="Run: " --height=20% --reverse < ~/dotfiles/commands.txt)
+    raw=$(fzf --expect=ctrl-e,ctrl-x,enter --prompt="Run: " --height=20% --reverse < ~/dotfiles/commands.txt)
     [[ -z $raw ]] && return 0
 
     key=$(head -n1 <<< "$raw")
@@ -167,12 +167,19 @@ runfavs() {
     # if Ctrl-E pressed (or you still have the old `$` hack), drop into edit mode
     if [[ $key == ctrl-e ]] || [[ $rawcmd == *\$ ]]; then
         cmd=${rawcmd%\$}                        # strip trailing $, if any
-          print -z -- "$cmd"                  # push into Zsh edit buffer
+        print -z -- "$cmd"                  # push into Zsh edit buffer
         return 0
+    elif [[ $key == ctrl-x ]]; then
+        # Ctrl-V: open in Vim, then run
+        tmpfile=$(mktemp)
+        echo "$rawcmd" > "$tmpfile"
+        ${EDITOR:-vim} "$tmpfile" || return 1
+        cmd=$(<"$tmpfile")
+        rm "$tmpfile"
+    else
+        cmd=$rawcmd
     fi
 
-    # otherwise run it straight
-    cmd=$rawcmd
     echo ">> $cmd"
     print -s -- "$cmd"
     eval "$cmd"
