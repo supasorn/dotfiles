@@ -145,6 +145,7 @@ spaces() {
 alias gp="~/dotfiles/scripts/gitpull.sh"
 # alias rs="sudo -E python ~/dotfiles/scripts/rsync_singularity_ui.py"
 
+export JUST_JUSTFILE="$HOME/dotfiles/justfile"
 runfavs() {
     local candidates selection fzf_selected_key item cmd
 
