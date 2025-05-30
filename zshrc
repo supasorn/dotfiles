@@ -144,45 +144,78 @@ spaces() {
 
 alias gp="~/dotfiles/scripts/gitpull.sh"
 # alias rs="sudo -E python ~/dotfiles/scripts/rsync_singularity_ui.py"
-# runfavs() {
-  # local cmd
-  # cmd=$(cat ~/dotfiles/commands.txt | fzf --prompt="Run: " --height=20% --reverse)
-  # if [ -n "$cmd" ]; then
-      # echo ">> $cmd"
-      # eval "$cmd"
-  # fi
-# }
 
 runfavs() {
-    local raw key rawcmd cmd
+    local candidates selection fzf_selected_key item cmd
 
-    # let fzf return both the key pressed and the selection
-    raw=$(fzf --expect=ctrl-e,ctrl-x,enter --prompt="Run: " --height=20% --reverse < ~/dotfiles/commands.txt)
-    [[ -z $raw ]] && return 0
+    candidates=$(
+    just --dump --dump-format json |
+    jq -rj '
+        .recipes
+        | to_entries[]
+        | .key as $name
+        | (
+            .value.body
+            | map(
+                (if type == "array" then .[0] else . end)
+                | sub("\\\\$"; "")         # drop trailing backslashes
+                | gsub("\\s+$"; "")        # trim right spaces
+            )
+            | join(" ")
+        ) as $cmd
+        | "\($name);\n  \($cmd)\u0000"
+    '
+    )
 
-    key=$(head -n1 <<< "$raw")
-    rawcmd=$(tail -n +2 <<< "$raw")
-    [[ -z $rawcmd ]] && return 0
+    # ---------- fuzzy-pick one item ----------
+    selection=$(
+    printf '%s' "$candidates" |
+    fzf --read0 --layout=reverse \
+        --tiebreak=begin,length \
+        --algo=v1 \
+        --preview 'printf "%s" {} | sed -n "2s/^[[:space:]]*//p"' \
+        --preview-window 'right:50%:wrap' \
+        --height=20% \
+        --expect=ctrl-e,ctrl-x,enter \
+        --prompt="Run: "
+    )
 
-    # if Ctrl-E pressed (or you still have the old `$` hack), drop into edit mode
-    if [[ $key == ctrl-e ]] || [[ $rawcmd == *\$ ]]; then
-        cmd=${rawcmd%\$}                        # strip trailing $, if any
-        print -z -- "$cmd"                  # push into Zsh edit buffer
-        return 0
-    elif [[ $key == ctrl-x ]]; then
-        # Ctrl-V: open in Vim, then run
-        tmpfile=$(mktemp)
-        echo "$rawcmd" > "$tmpfile"
-        ${EDITOR:-vim} "$tmpfile" || return 1
-        cmd=$(<"$tmpfile")
-        rm "$tmpfile"
-    else
-        cmd=$rawcmd
+    [[ -z $selection ]] && return 0   # nothing chosen
+
+    fzf_selected_key=${selection%%$'\n'*}
+    # Remainder after first newline is the chosen two‑line item
+    item=${selection#*$'\n'}
+    # Trim the trailing newline that fzf appends
+    item=${item%$'\n'}
+
+    # Extract the actual shell command (second line, trim leading spaces)
+    cmd=$(printf '%s' "$item" | sed -n '2{s/^ *//;p;}')
+    case "$fzf_selected_key" in
+        ctrl-e)
+            print -z -- "$cmd"   # put into ZLE for editing
+            return 0 ;;
+        ctrl-x)
+            local tmpfile=$(mktemp)
+            printf '%s\n' "$cmd" > "$tmpfile"
+            ${EDITOR:-vim} "$tmpfile" || return 1
+            cmd=$(<"$tmpfile")
+            rm "$tmpfile" 
+            echo "$cmd"
+            print -s -- "$cmd"       # add to history
+            eval "$cmd"
+            return 0 ;;
+    esac
+    
+
+    recipe_name=$(printf '%s' "$item" | head -n 1 | cut -d';' -f1)
+            
+    if [[ -z "$recipe_name" ]]; then
+        echo "Error: Could not extract recipe name from: $item" >&2
+        return 1
     fi
 
-    echo ">> $cmd"
-    print -s -- "$cmd"
-    eval "$cmd"
+    print -s -- "$cmd"       # add to history
+    just "$recipe_name"
 }
 
 alias r="runfavs"
