@@ -223,12 +223,13 @@ source-git() {
   #echo "source $plugin"
 }
 
+# source-git https://github.com/changyuheng/zsh-interactive-cd.git  # fzf-tab provides this functionality and more
 source-git https://github.com/supasorn/fzf-z.git  # ctrl-g function
-source-git https://github.com/changyuheng/zsh-interactive-cd.git 
 source-git https://github.com/zsh-users/zsh-autosuggestions.git 
 source-git https://github.com/hchbaw/zce.zsh.git  # easy motion
 source-git https://github.com/urbainvaes/fzf-marks
 source-git https://github.com/zsh-users/zsh-syntax-highlighting
+source-git https://github.com/Aloxaf/fzf-tab
 
 bindkey '^[[Z' autosuggest-accept
 bindkey '^f' zce
