@@ -1,3 +1,4 @@
+set shell := ["bash", "-uc"]
 # Just activate the default env
 activatedefault:
     source ~/miniconda3/bin/activate /conda_envs/default
