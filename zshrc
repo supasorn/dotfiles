@@ -157,7 +157,7 @@ runfavs() {
     fzf --read0 --layout=reverse \
         --tiebreak=begin,length \
         --algo=v1 \
-        --preview 'just --dry-run {}' \
+        --preview 'just --dry-run --yes {}' \
         --preview-window 'right:70%:wrap' \
         --height=20% \
         --expect=ctrl-e,ctrl-x,enter \
@@ -169,7 +169,7 @@ runfavs() {
     fzf_selected_key=${selection%%$'\n'*}
     item=${selection#*$'\n'}
     item=${item%$'\n'}
-    cmd="$(just --dry-run "$item" 2>&1)"
+    cmd="$(just --dry-run --yes "$item" 2>&1)"
 
     case "$fzf_selected_key" in
         ctrl-e)
