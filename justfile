@@ -29,15 +29,17 @@ ist-to-nas-del:
 download url:
     curl -SL -O {{url}}
 
-gotocomfyui:
-    source ~/miniconda3/bin/activate && \
-    conda activate /conda_envs/default && \
-    cd /projects/ComfyUI
+comfy_cmd := '''
+source ~/miniconda3/bin/activate /conda_envs/default && \
+  cd /projects/ComfyUI && \
+  CUDA_VISIBLE_DEVICES=1 python main.py --listen --port 9876
+'''
 
-gotocomfyui-sg:
-    sg --cmd "source ~/miniconda3/bin/activate && \
-            conda activate /conda_envs/default && \
-            cd /projects/ComfyUI"
+comfyui:
+    {{comfy_cmd}}
+
+comfyui-sg:
+    sg --cmd "{{comfy_cmd}}"
 
 dwui_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/default && \
@@ -55,39 +57,48 @@ dwui:
 dwui-sg:
     sg --cmd "{{dwui_cmd}}"
 
+depth_anything_cmd := '''
+source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && \
+  cd /projects/DAVDA && \
+  CUDA_VISIBLE_DEVICES=0 python run.py 
+  --image
+'''
 # Depth-Anything (image)
-depth_anything:
-    source ~/miniconda3/bin/activate && \
-               conda activate /conda_envs/video_depth_anything && \
-               cd /projects/DAVDA && \
-               CUDA_VISIBLE_DEVICES=0 python run.py \
-                 --image \
-                 --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/
+depth_anything-v3:
+    {{depth_anything_cmd}} --path=/host/data/supasorn/img3dviewer/images/
 
-depth_anything-sg:
-    sg --cmd "source ~/miniconda3/bin/activate && \
-               conda activate /conda_envs/video_depth_anything && \
-               cd /projects/DAVDA && \
-               CUDA_VISIBLE_DEVICES=0 python run.py \
-                 --image \
-                 --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/"
+depth_anything-v3-sg:
+    sg --cmd "{{depth_anything_cmd}} --path=/host/data/supasorn/img3dviewer/images/"
 
-video_depth_anything:
-    source ~/miniconda3/bin/activate && \
-               conda activate /conda_envs/video_depth_anything && \
-               cd /projects/DAVDA && \
-               CUDA_VISIBLE_DEVICES=0 python run.py \
-                 --video \
-                 --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/
+depth_anything-nonv3:
+    {{depth_anything_cmd}} --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/
+
+depth_anything-nonv3-sg:
+    sg --cmd "{{depth_anything_cmd}} --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/"
 
 
-video_depth_anything-sg:
-    sg --cmd "source ~/miniconda3/bin/activate && \
-               conda activate /conda_envs/video_depth_anything && \
-               cd /projects/DAVDA && \
-               CUDA_VISIBLE_DEVICES=0 python run.py \
-                 --video \
-                 --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/"
+video_depth_anything_cmd := '''
+source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && \
+  cd /projects/DAVDA && \
+  CUDA_VISIBLE_DEVICES=0 python run.py \
+    --video \
+'''
+video_depth_anything-v3:
+    {{video_depth_anything_cmd}} --path=/host/data/supasorn/img3dviewer/videos/
+video_depth_anything-v3-sg:
+    sg --cmd "{{video_depth_anything_cmd}} --path=/host/data/supasorn/img3dviewer/videos/"
+video_depth_anything-nonv3:
+    {{video_depth_anything_cmd}} --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/videos/
+video_depth_anything-nonv3-sg:
+    sg --cmd "{{video_depth_anything_cmd}} --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/videos/"
 
-framepack: 
-    sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default; cd /projects/FramePack; CUDA_VISIBLE_DEVICES=0 python demo_gradio.py --server 0.0.0.0 --port 9875"
+framepack_cmd := '''
+source ~/miniconda3/bin/activate /conda_envs/default && \
+  cd /projects/FramePack && \
+  CUDA_VISIBLE_DEVICES=0 python demo_gradio.py --server 0.0.0.0 --port 9875
+'''
+framepack:
+    {{framepack_cmd}}
+framepack-sg:
+    sg --cmd "{{framepack_cmd}}"
+
