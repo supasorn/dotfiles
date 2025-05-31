@@ -149,24 +149,7 @@ export JUST_JUSTFILE="$HOME/dotfiles/justfile"
 runfavs() {
     local candidates selection fzf_selected_key item cmd
 
-    candidates=$(
-    just --dump --dump-format json |
-    jq -rj '
-        .recipes
-        | to_entries[]
-        | .key as $name
-        | (
-            .value.body
-            | map(
-                (if type == "array" then .[0] else . end)
-                | sub("\\\\$"; "")         # drop trailing backslashes
-                | gsub("\\s+$"; "")        # trim right spaces
-            )
-            | join(" ")
-        ) as $cmd
-        | "\($name);\n  \($cmd)\u0000"
-    '
-    )
+    candidates=$(just --summary | tr ' ' '\0')
 
     # ---------- fuzzy-pick one item ----------
     selection=$(
@@ -174,8 +157,8 @@ runfavs() {
     fzf --read0 --layout=reverse \
         --tiebreak=begin,length \
         --algo=v1 \
-        --preview 'printf "%s" {} | sed -n "2s/^[[:space:]]*//p"' \
-        --preview-window 'right:50%:wrap' \
+        --preview 'just --dry-run {}' \
+        --preview-window 'right:70%:wrap' \
         --height=20% \
         --expect=ctrl-e,ctrl-x,enter \
         --prompt="Run: "
@@ -184,13 +167,10 @@ runfavs() {
     [[ -z $selection ]] && return 0   # nothing chosen
 
     fzf_selected_key=${selection%%$'\n'*}
-    # Remainder after first newline is the chosen two‑line item
     item=${selection#*$'\n'}
-    # Trim the trailing newline that fzf appends
     item=${item%$'\n'}
+    cmd="$(just --dry-run "$item" 2>&1)"
 
-    # Extract the actual shell command (second line, trim leading spaces)
-    cmd=$(printf '%s' "$item" | sed -n '2{s/^ *//;p;}')
     case "$fzf_selected_key" in
         ctrl-e)
             print -z -- "$cmd"   # put into ZLE for editing
@@ -206,17 +186,11 @@ runfavs() {
             eval "$cmd"
             return 0 ;;
     esac
-    
 
-    recipe_name=$(printf '%s' "$item" | head -n 1 | cut -d';' -f1)
-            
-    if [[ -z "$recipe_name" ]]; then
-        echo "Error: Could not extract recipe name from: $item" >&2
-        return 1
-    fi
+    # echo "$item" 
+    #print -s -- "$cmd"       # add to history
+    eval "$cmd" 
 
-    print -s -- "$cmd"       # add to history
-    just "$recipe_name"
 }
 
 alias r="runfavs"

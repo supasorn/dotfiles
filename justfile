@@ -39,24 +39,21 @@ gotocomfyui-sg:
             conda activate /conda_envs/default && \
             cd /projects/ComfyUI"
 
+dwui_cmd := '''
+source ~/miniconda3/bin/activate /conda_envs/default && \
+  cd /projects/stable-diffusion-webui && \
+  CUDA_VISIBLE_DEVICES=1 ./webui.sh \
+    --gradio-auth-path pw.txt \
+    --disable-safe-unpickle \
+    --listen
+'''
+
 # Launch Stable-Diffusion WebUI via sg
 dwui:
-    source ~/miniconda3/bin/activate && \
-               conda activate /conda_envs/default && \
-               cd /projects/stable-diffusion-webui && \
-               CUDA_VISIBLE_DEVICES=1 ./webui.sh \
-                 --gradio-auth-path pw.txt \
-                 --disable-safe-unpickle \
-                 --listen
+    {{dwui_cmd}}
 
 dwui-sg:
-    sg --cmd "source ~/miniconda3/bin/activate && \
-               conda activate /conda_envs/default && \
-               cd /projects/stable-diffusion-webui && \
-               CUDA_VISIBLE_DEVICES=1 ./webui.sh \
-                 --gradio-auth-path pw.txt \
-                 --disable-safe-unpickle \
-                 --listen"
+    sg --cmd "{{dwui_cmd}}"
 
 # Depth-Anything (image)
 depth_anything:
