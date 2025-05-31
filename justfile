@@ -7,6 +7,10 @@ activatedefault:
 meminfo:
     python ~/dotfiles/scripts/mem_info.py
 
+nas-to-v26:
+    sudo rsync -avh --delete /ist-nas/users/supasorn/singularity_slim/ /home/supasorn/singularity_slim/
+    sudo rsync -avh --delete /ist-nas/users/supasorn/conda_envs/default/ /home/supasorn/conda_envs/
+
 # Sync from NAS to IST
 [confirm]
 nas-to-ist:
