@@ -188,7 +188,8 @@ runfavs() {
     esac
 
     # echo "$item" 
-    #print -s -- "$cmd"       # add to history
+    print -s -- "$cmd"       # add to history
+    echo ">> $cmd"
     eval "$cmd" 
 
 }
