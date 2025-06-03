@@ -62,39 +62,26 @@ dwui-sg:
     sg --cmd "{{dwui_cmd}}"
 
 depth_anything_cmd := '''
-source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && \
-  cd /projects/DAVDA && \
-  CUDA_VISIBLE_DEVICES=0 python run.py 
-  --image
+source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && cd /projects/DAVDA && \
+  CUDA_VISIBLE_DEVICES=0 python run.py --image
 '''
 # Depth-Anything (image)
-depth_anything-v3:
-    {{depth_anything_cmd}} --path=/host/data/supasorn/img3dviewer/images/
+depth_anything:
+    {{depth_anything_cmd}} 
 
-depth_anything-v3-sg:
-    sg --cmd "{{depth_anything_cmd}} --path=/host/data/supasorn/img3dviewer/images/"
-
-depth_anything-nonv3:
-    {{depth_anything_cmd}} --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/
-
-depth_anything-nonv3-sg:
-    sg --cmd "{{depth_anything_cmd}} --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/images/"
+depth_anything-sg:
+    sg --cmd "{{depth_anything_cmd}}"
 
 
 video_depth_anything_cmd := '''
-source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && \
-  cd /projects/DAVDA && \
-  CUDA_VISIBLE_DEVICES=0 python run.py \
-    --video \
+source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && cd /projects/DAVDA && \
+  CUDA_VISIBLE_DEVICES=0 python run.py --video
 '''
-video_depth_anything-v3:
-    {{video_depth_anything_cmd}} --path=/host/data/supasorn/img3dviewer/videos/
-video_depth_anything-v3-sg:
-    sg --cmd "{{video_depth_anything_cmd}} --path=/host/data/supasorn/img3dviewer/videos/"
-video_depth_anything-nonv3:
-    {{video_depth_anything_cmd}} --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/videos/
-video_depth_anything-nonv3-sg:
-    sg --cmd "{{video_depth_anything_cmd}} --path=/host/home/supasorn/mnt/v3/data/supasorn/img3dviewer/videos/"
+video_depth_anything:
+    {{video_depth_anything_cmd}}
+
+video_depth_anything-sg:
+    sg --cmd "{{video_depth_anything_cmd}}"
 
 framepack_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/default && \
@@ -106,3 +93,7 @@ framepack:
 framepack-sg:
     sg --cmd "{{framepack_cmd}}"
 
+mnt_v3:
+    fusermount -u ~/mnt/v3 || true
+    mkdir -p ~/mnt/v3
+    sshfs -o IdentityFile=~/.ssh/id_rsa -o idmap=user v3:/ ~/mnt/v3
