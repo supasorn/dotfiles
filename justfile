@@ -49,7 +49,7 @@ dwui_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/default && \
   cd /projects/stable-diffusion-webui && \
   CUDA_VISIBLE_DEVICES=1 ./webui.sh \
-    --gradio-auth-path pw.txt \
+    --gradio-auth-path au \
     --disable-safe-unpickle \
     --listen
 '''
@@ -97,3 +97,6 @@ mnt_v3:
     fusermount -u ~/mnt/v3 || true
     mkdir -p ~/mnt/v3
     sshfs -o IdentityFile=~/.ssh/id_rsa -o idmap=user v3:/ ~/mnt/v3
+
+open-config:
+    v ~/dotfiles/justfile
