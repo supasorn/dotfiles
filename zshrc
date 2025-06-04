@@ -149,6 +149,16 @@ export JUST_JUSTFILE="$HOME/dotfiles/justfile"
 runfavs() {
     local candidates selection fzf_selected_key item cmd
 
+    if [[ -n $1 ]]; then
+        # If an argument is passed, run the just command directly
+        item="$1"
+        cmd="$(just --dry-run --yes "$item" 2>&1)"
+        echo "$cmd"
+        print -s -- "$cmd"
+        eval "$cmd"
+        return 
+    fi
+
     candidates=$(just --summary | tr ' ' '\0')
 
     # ---------- fuzzy-pick one item ----------
@@ -188,8 +198,8 @@ runfavs() {
     esac
 
     # echo "$item" 
+    echo "$cmd"
     print -s -- "$cmd"       # add to history
-    echo ">> $cmd"
     eval "$cmd" 
 
 }
