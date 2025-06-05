@@ -219,7 +219,7 @@ alias pdf='cd /Users/supasorn/projects/pdf_signer; source ~/Projects/forex/venv_
 alias ssh="ssh -R 52698:localhost:22 "
 # alias pdf='cd /Users/supasorn/projects/pdf_signer; python3 multisign.py'
 
-s() {
+eval_and_hist() {
   print -s "$*"
   eval "$@"
   fc -A
