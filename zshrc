@@ -180,7 +180,7 @@ runfavs() {
         --preview 'just --dry-run --yes {}' \
         --preview-window 'right:70%:wrap' \
         --height=20% \
-        --expect=ctrl-e,ctrl-x,enter \
+        --expect=ctrl-e,ctrl-x,ctrl-s,enter \
         --prompt="Run: "
     )
 
@@ -203,6 +203,12 @@ runfavs() {
             rm "$tmpfile" 
             echo "$cmd"
             print -s -- "$cmd"       # add to history
+            eval "$cmd"
+            return 0 ;;
+        ctrl-s)
+            cmd="sg --cmd \"$cmd\""
+            echo "$cmd"
+            print -s -- "$cmd"
             eval "$cmd"
             return 0 ;;
     esac
