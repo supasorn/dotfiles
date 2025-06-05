@@ -482,6 +482,7 @@ then
   print -s "$*"
   history -a
   fc -R
+  echo "fc-r"
   eval "$*"
   set --
 fi
