@@ -75,7 +75,7 @@ depth_anything-sg:
 
 video_depth_anything_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && cd /projects/DAVDA && \
-  CUDA_VISIBLE_DEVICES=0 python run.py --video
+  eval_and_hist CUDA_VISIBLE_DEVICES=0 python run.py --video
 '''
 video_depth_anything:
     {{video_depth_anything_cmd}}
