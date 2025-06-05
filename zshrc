@@ -476,19 +476,13 @@ if [ -d "/startup_scripts" ]; then
   done
 fi
 
-run_eval_command() {
-  shift
-  eval "$*"
+if [[ $1 == eval ]]
+then
+  "$@"
   set --
-}
+fi
 
-[[ $1 == eval ]] && run_eval_command "$@"
-
-# if [[ $1 == eval ]]
-# then
-  # "$@"
-  # set --
-# fi
+fc -R
 
 
 # zprof
