@@ -219,6 +219,11 @@ alias pdf='cd /Users/supasorn/projects/pdf_signer; source ~/Projects/forex/venv_
 alias ssh="ssh -R 52698:localhost:22 "
 # alias pdf='cd /Users/supasorn/projects/pdf_signer; python3 multisign.py'
 
+s() {
+  print -s "$*"
+  eval "$@"
+}
+
 fshere() {
   cmd="sshfs -o cache=no -o IdentityFile=/home/$USER/.ssh/id_rsa $USER@$@ $PWD"
   echo $cmd
