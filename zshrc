@@ -221,9 +221,9 @@ alias ssh="ssh -R 52698:localhost:22 "
 
 eval_and_hist() {
   print -s "$*"
-  eval "$@"
   fc -A
   fc -R
+  eval "$@"
 }
 
 fshere() {
