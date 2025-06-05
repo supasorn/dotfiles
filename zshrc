@@ -483,6 +483,7 @@ then
   history -a
   fc -R
   echo "fc-r"
+  echo $HISTFILE
   eval "$*"
   set --
 fi
