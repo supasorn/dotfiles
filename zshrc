@@ -476,8 +476,13 @@ fi
 
 if [[ $1 == eval ]]
 then
-    "$@"
-set --
+  # "$@"
+  # set --
+  shift
+  print -s "$*"
+  history -a
+  eval "$*"
+  set --
 fi
 
 
