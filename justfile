@@ -36,7 +36,7 @@ download url:
 comfy_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/default && \
   cd /projects/ComfyUI && \
-  CUDA_VISIBLE_DEVICES=1 python main.py --listen --port 9876
+  eval_and_hist CUDA_VISIBLE_DEVICES=1 python main.py --listen --port 9876
 '''
 
 comfyui:
