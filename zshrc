@@ -481,6 +481,7 @@ then
   shift
   print -s "$*"
   history -a
+  fc -R
   eval "$*"
   set --
 fi
