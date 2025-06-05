@@ -112,6 +112,16 @@ SAVEHIST=$HISTSIZE
 # Appends every command to the history file once it is executed
 setopt inc_append_history
 
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd load-history-once
+
+load-history-once() {
+  if [[ -r $HISTFILE && -z $ZSH_HISTORY_LOADED ]]; then
+    fc -R
+    ZSH_HISTORY_LOADED=1
+  fi
+}
+
 
 export BAT_THEME="gruvbox-dark"
 
