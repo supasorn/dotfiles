@@ -222,6 +222,8 @@ alias ssh="ssh -R 52698:localhost:22 "
 s() {
   print -s "$*"
   eval "$@"
+  fc -A
+  fc -R
 }
 
 fshere() {
@@ -476,15 +478,7 @@ fi
 
 if [[ $1 == eval ]]
 then
-  # "$@"
-  # set --
-  shift
-  print -s "$*"
-  fc -A
-  fc -R
-  echo "fc-r"
-  echo $HISTFILE
-  eval "$*"
+  "$@"
   set --
 fi
 
