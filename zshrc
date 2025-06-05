@@ -309,18 +309,19 @@ elif [[ $hn == "ssmb.local" ]]; then
   alias ut="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'"
   alias run="python3 ~/research/cluster_utils/singularitylauncher.py"
   alias ul="tmux a -t UL"
+  alias lsgpu='source ~/Projects/forex/venv_forex/bin/activate; python3 ~/dotfiles/scripts/lsgpu.py'
 
   export DYLD_LIBRARY_PATH="/usr/local/lib"
   export LDFLAGS="-L/usr/local/lib"
   export CFLAGS="-I/usr/local/include"
 else 
   # alias run="python3 /home/supasorn/cluster_utils/tasklauncher_uni.py"
+  alias lsgpu='python3 ~/dotfiles/scripts/lsgpu.py'
   alias run="python3 /home/supasorn/cluster_utils/singularitylauncher.py"
   alias ul="tmux a -t UL"
 fi
 alias sg='python3 /ist-nas/users/supasorn/singularity_slim/run.py'
 alias ns='python3 ~/dotfiles/scripts/lsgpu.py --local'
-alias lsgpu='python3 ~/dotfiles/scripts/lsgpu.py'
 
 source ~/.vim/export_lf_icons.sh 2> /dev/null 
 
