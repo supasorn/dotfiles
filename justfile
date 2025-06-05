@@ -100,3 +100,8 @@ mnt_v3:
 
 open-config:
     v ~/dotfiles/justfile
+
+img3dviewer:
+    sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default && \
+      cd /host/data/supasorn/img3dviewer && load_nvm && \
+      node web.js -pw"
