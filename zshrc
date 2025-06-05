@@ -480,7 +480,7 @@ then
   # set --
   shift
   print -s "$*"
-  history -a
+  fc -A
   fc -R
   echo "fc-r"
   echo $HISTFILE
