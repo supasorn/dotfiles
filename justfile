@@ -48,7 +48,7 @@ comfyui-sg:
 dwui_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/default && \
   cd /projects/stable-diffusion-webui && \
-  CUDA_VISIBLE_DEVICES=1 ./webui.sh \
+  eval_and_hist CUDA_VISIBLE_DEVICES=1 ./webui.sh \
     --gradio-auth-path au \
     --disable-safe-unpickle \
     --listen
@@ -86,7 +86,7 @@ video_depth_anything-sg:
 framepack_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/default && \
   cd /projects/FramePack && \
-  CUDA_VISIBLE_DEVICES=0 python demo_gradio.py --server 0.0.0.0 --port 9875
+  eval_and_hist CUDA_VISIBLE_DEVICES=0 python demo_gradio.py --server 0.0.0.0 --port 9875
 '''
 framepack:
     {{framepack_cmd}}

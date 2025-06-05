@@ -199,7 +199,7 @@ runfavs() {
 
     # echo "$item" 
     echo "$cmd"
-    print -s -- "$cmd"       # add to history
+    print -s -- "r $item"       # add to history
     eval "$cmd" 
 
 }
