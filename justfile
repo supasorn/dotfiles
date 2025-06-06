@@ -63,8 +63,9 @@ dwui-sg:
     sg --cmd "{{dwui_cmd}}"
 
 depth_anything_cmd := '''
-source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && cd /projects/DAVDA && \
-  eval_and_hist CUDA_VISIBLE_DEVICES=0 python run.py --image
+source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
+cd /projects/DAVDA && 
+eval_and_hist CUDA_VISIBLE_DEVICES=0 python run.py --image
 '''
 # Depth-Anything (image)
 depth_anything:
