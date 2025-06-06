@@ -104,9 +104,7 @@ open-just-config:
     v ~/dotfiles/justfile
 
 install-just:
-    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to DEST
-    sudo cp DEST/just /usr/bin
-    rm -rf DEST
+    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to DEST && sudo cp DEST/just /usr/bin && rm -rf DEST
 
 img3dviewer:
     sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default && \
