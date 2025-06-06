@@ -100,8 +100,13 @@ mnt_v3:
     mkdir -p ~/mnt/v3
     sshfs -o IdentityFile=~/.ssh/id_rsa -o idmap=user v3:/ ~/mnt/v3
 
-open-config:
+open-just-config:
     v ~/dotfiles/justfile
+
+install-just:
+    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to DEST
+    sudo cp DEST/just /usr/bin
+    rm -rf DEST
 
 img3dviewer:
     sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default && \
