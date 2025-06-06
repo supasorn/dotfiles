@@ -34,66 +34,34 @@ ist-to-nas-del:
 download url:
     curl -SL -O {{url}}
 
-comfy_cmd := '''
-source ~/miniconda3/bin/activate /conda_envs/default &&
-  cd /projects/ComfyUI &&
-  eval_and_hist CUDA_VISIBLE_DEVICES=0 python main.py --listen --port 9876
-'''
-
 comfyui:
-    {{comfy_cmd}}
-
-comfyui-sg:
-    sg --cmd "{{comfy_cmd}}"
-
-dwui_cmd := '''
-source ~/miniconda3/bin/activate /conda_envs/default &&
-  cd /projects/stable-diffusion-webui &&
-  eval_and_hist CUDA_VISIBLE_DEVICES=0 ./webui.sh \
-    --gradio-auth-path au \
-    --disable-safe-unpickle \
-    --listen
-'''
+    source ~/miniconda3/bin/activate /conda_envs/default &&
+    cd /projects/ComfyUI &&
+    eval_and_hist CUDA_VISIBLE_DEVICES=0 python main.py --listen --port 9876
 
 # Launch Stable-Diffusion WebUI via sg
 dwui:
-    {{dwui_cmd}}
+    source ~/miniconda3/bin/activate /conda_envs/default &&
+    cd /projects/stable-diffusion-webui &&
+    eval_and_hist CUDA_VISIBLE_DEVICES=0 ./webui.sh \
+        --gradio-auth-path au \
+        --disable-safe-unpickle \
+        --listen
 
-dwui-sg:
-    sg --cmd "{{dwui_cmd}}"
-
-depth_anything_cmd := '''
-source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
-cd /projects/DAVDA && 
-eval_and_hist CUDA_VISIBLE_DEVICES=0 python run.py --image
-'''
-# Depth-Anything (image)
 depth_anything:
-    {{depth_anything_cmd}} 
+    source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
+    cd /projects/DAVDA && 
+    eval_and_hist CUDA_VISIBLE_DEVICES=0 python run.py --image
 
-depth_anything-sg:
-    sg --cmd "{{depth_anything_cmd}}"
-
-video_depth_anything_cmd := '''
-source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
-cd /projects/DAVDA && 
-eval_and_hist CUDA_VISIBLE_DEVICES=0 python run.py --video
-'''
 video_depth_anything:
-    {{video_depth_anything_cmd}}
+    source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
+    cd /projects/DAVDA && 
+    eval_and_hist CUDA_VISIBLE_DEVICES=0 python run.py --video
 
-video_depth_anything-sg:
-    sg --cmd "{{video_depth_anything_cmd}}"
-
-framepack_cmd := '''
-source ~/miniconda3/bin/activate /conda_envs/default &&
-cd /projects/FramePack &&
-eval_and_hist CUDA_VISIBLE_DEVICES=0 python demo_gradio.py --server 0.0.0.0 --port 9875
-'''
 framepack:
-    {{framepack_cmd}}
-framepack-sg:
-    sg --cmd "{{framepack_cmd}}"
+    source ~/miniconda3/bin/activate /conda_envs/default &&
+    cd /projects/FramePack &&
+    eval_and_hist CUDA_VISIBLE_DEVICES=0 python demo_gradio.py --server 0.0.0.0 --port 9875
 
 mnt_v3:
     fusermount -u ~/mnt/v3 || true
@@ -107,9 +75,9 @@ install-just:
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to DEST && sudo cp DEST/just /usr/bin && rm -rf DEST
 
 img3dviewer:
-    sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default && \
-      cd /host/data/supasorn/img3dviewer && load_nvm && \
-      eval_and_hist node web.js -pw"
+    source ~/miniconda3/bin/activate /conda_envs/default &&
+    cd /host/data/supasorn/img3dviewer && load_nvm &&
+    eval_and_hist node web.js -pw
 
 remote-shells:
     ~/dotfiles/scripts/tmux_remote_shells.sh v1-v23

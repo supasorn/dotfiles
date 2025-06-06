@@ -32,14 +32,6 @@ def write_shell_command(cmd: str, eval=True, save_history=True, edit=False, disp
         print(display)
 
 def main():
-    if len(sys.argv) > 1:
-        item = sys.argv[1]
-        cmd_output = run_just_dry_run(item)
-        append_to_history(cmd_output)
-        write_shell_command(cmd_output)
-        return
-
-
     result = subprocess.run(['just', '--summary'], capture_output=True, text=True)
     candidates = result.stdout.strip().replace(' ', '\0')
 
@@ -48,7 +40,7 @@ def main():
          '--tiebreak=begin,length', '--algo=v1',
          '--preview=just --dry-run --yes {}',
          '--preview-window=right:70%:wrap',
-         '--height=20%', '--expect=ctrl-e,ctrl-x,enter',
+         '--height=20%', '--expect=ctrl-e,ctrl-x,ctrl-s,enter',
          '--prompt=Run: '],
         input=candidates.encode('utf-8'),
         capture_output=True
@@ -97,6 +89,9 @@ def main():
         os.unlink(tmp_path)
 
         write_shell_command(edited_cmd)
+    elif fzf_selected_key == 'ctrl-s':
+        cmd_output = f'sg --cmd "{cmd_output}"'
+        write_shell_command(cmd_output, edit=True, display=None)
     else:
         write_shell_command(cmd_output)
 
