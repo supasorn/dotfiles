@@ -110,3 +110,12 @@ img3dviewer:
 
 remote-shells:
     ~/dotfiles/scripts/tmux_remote_shells.sh v1-v23
+
+find-recent-files:
+    find . -type f -name "*.*" -mmin -200
+
+rg-files-recursive file:
+    rg --files --no-ignore | rg {{file}}
+
+rg-search-text-one-level text:
+    rg --max-depth=1 {{text}}

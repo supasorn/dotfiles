@@ -112,8 +112,8 @@ SAVEHIST=$HISTSIZE
 # Appends every command to the history file once it is executed
 setopt inc_append_history
 
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd load-history-once
+# autoload -Uz add-zsh-hook
+# add-zsh-hook precmd load-history-once
 
 load-history-once() {
   if [[ -r $HISTFILE && -z $ZSH_HISTORY_LOADED ]]; then
@@ -156,79 +156,13 @@ alias gp="~/dotfiles/scripts/gitpull.sh"
 # alias rs="sudo -E python ~/dotfiles/scripts/rsync_singularity_ui.py"
 
 export JUST_JUSTFILE="$HOME/dotfiles/justfile"
-runfavs() {
-    local candidates selection fzf_selected_key item cmd
 
-    if [[ -n $1 ]]; then
-        # If an argument is passed, run the just command directly
-        item="$1"
-        cmd="$(just --dry-run --yes "$item" 2>&1)"
-        echo "$cmd"
-        print -s -- "$cmd"
-        eval "$cmd"
-        return 
-    fi
-
-    candidates=$(just --summary | tr ' ' '\0')
-
-    # ---------- fuzzy-pick one item ----------
-    selection=$(
-    printf '%s' "$candidates" |
-    fzf --read0 --layout=reverse \
-        --tiebreak=begin,length \
-        --algo=v1 \
-        --preview 'just --dry-run --yes {}' \
-        --preview-window 'right:70%:wrap' \
-        --height=20% \
-        --expect=ctrl-e,ctrl-x,ctrl-s,enter \
-        --prompt="Run: "
-    )
-
-    [[ -z $selection ]] && return 0   # nothing chosen
-
-    fzf_selected_key=${selection%%$'\n'*}
-    item=${selection#*$'\n'}
-    item=${item%$'\n'}
-    cmd="$(just --dry-run --yes "$item" 2>&1)"
-
-    case "$fzf_selected_key" in
-        ctrl-e)
-            print -z -- "$cmd"   # put into ZLE for editing
-            return 0 ;;
-        ctrl-x)
-            local tmpfile=$(mktemp)
-            printf '%s\n' "$cmd" > "$tmpfile"
-            ${EDITOR:-vim} "$tmpfile" || return 1
-            cmd=$(<"$tmpfile")
-            rm "$tmpfile" 
-            echo "$cmd"
-            print -s -- "$cmd"       # add to history
-            eval "$cmd"
-            return 0 ;;
-        ctrl-s)
-            cmd="sg --cmd \"$cmd\""
-            echo "$cmd"
-            print -s -- "$cmd"
-            eval "$cmd"
-            return 0 ;;
-    esac
-
-    # echo "$item" 
-    echo "$cmd"
-    print -s -- "r $item"       # add to history
-    eval "$cmd" 
-
-}
-
-alias r="runfavs"
+alias r="python runfavs.py && source /tmp/runfavs_result.sh"
 
 alias tm="tmux -u"
 alias tma="tmux -u a"
 
 alias lss="ls -lahrS"
-
-alias rgf='rg --files --no-ignore | rg'
-alias rg1="rg --max-depth=1"
 
 alias pdf='cd /Users/supasorn/projects/pdf_signer; source ~/Projects/forex/venv_forex/bin/activate; python3 multisign.py'
 
