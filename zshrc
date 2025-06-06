@@ -157,7 +157,7 @@ alias gp="~/dotfiles/scripts/gitpull.sh"
 
 export JUST_JUSTFILE="$HOME/dotfiles/justfile"
 
-alias r="python runfavs.py && source /tmp/runfavs_result.sh"
+alias r="python ~/dotfiles/scripts/runfavs.py && source /tmp/runfavs_result.sh"
 
 alias tm="tmux -u"
 alias tma="tmux -u a"
