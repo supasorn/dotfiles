@@ -105,3 +105,6 @@ img3dviewer:
     sg --cmd "source ~/miniconda3/bin/activate /conda_envs/default && \
       cd /host/data/supasorn/img3dviewer && load_nvm && \
       eval_and_hist node web.js -pw"
+
+remote-shells:
+    ~/dotfiles/scripts/tmux_remote_shells.sh v1-v23
