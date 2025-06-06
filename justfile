@@ -1,4 +1,5 @@
 set shell := ["bash", "-uc"]
+
 # Just activate the default env
 activatedefault:
     source ~/miniconda3/bin/activate /conda_envs/default
@@ -36,7 +37,7 @@ download url:
 comfy_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/default && \
   cd /projects/ComfyUI && \
-  eval_and_hist CUDA_VISIBLE_DEVICES=1 python main.py --listen --port 9876
+  eval_and_hist CUDA_VISIBLE_DEVICES=0 python main.py --listen --port 9876
 '''
 
 comfyui:
@@ -48,7 +49,7 @@ comfyui-sg:
 dwui_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/default && \
   cd /projects/stable-diffusion-webui && \
-  eval_and_hist CUDA_VISIBLE_DEVICES=1 ./webui.sh \
+  eval_and_hist CUDA_VISIBLE_DEVICES=0 ./webui.sh \
     --gradio-auth-path au \
     --disable-safe-unpickle \
     --listen
@@ -71,7 +72,6 @@ depth_anything:
 
 depth_anything-sg:
     sg --cmd "{{depth_anything_cmd}}"
-
 
 video_depth_anything_cmd := '''
 source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && cd /projects/DAVDA && \
