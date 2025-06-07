@@ -68,7 +68,7 @@ mnt_v3:
     mkdir -p ~/mnt/v3
     sshfs -o IdentityFile=~/.ssh/id_rsa -o idmap=user v3:/ ~/mnt/v3
 
-open-just-config:
+open-justfile-config:
     v ~/dotfiles/justfile
 
 install-just:
@@ -90,3 +90,7 @@ rg-files-recursive file:
 
 rg-search-text-one-level text:
     rg --max-depth=1 {{text}}
+
+python-http-server port="8000":
+    python -m http.server {{port}}
+

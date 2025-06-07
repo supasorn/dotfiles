@@ -2,7 +2,9 @@ import subprocess
 import sys
 import os
 import tempfile
+import readline
 import re
+
 SHELL_OUTPUT_FILE = "/tmp/runfavs_result.sh"
 
 def run_just_dry_run(item, args=[]):
@@ -31,27 +33,81 @@ def write_shell_command(cmd: str, eval=True, save_history=True, edit=False, disp
     elif display != None:
         print(display)
 
+def argument_mode(recipe):
+    result = subprocess.run(['just', '--show', recipe], capture_output=True, text=True)
+    lines = result.stdout.strip().splitlines()
+    args = [] 
+    for line in lines:
+        if line.startswith('#'):
+            continue
+        if not line.strip():
+            continue
+        if line[-1] == ':':
+            sp = line[:-1].split()[1:]
+            for arg in sp:
+                if '=' in arg:
+                    arg_name, default_value = arg.split('=', 1)
+                    args.append((arg_name, default_value))
+                else:
+                    args.append((arg, None))
+
+    cmd_output = run_just_dry_run(recipe, ['\033[31m{{'+arg[0]+'}}\033[0m' for arg in args])
+    if len(args) > 0:
+        print(cmd_output)
+
+        arg_vals = [val for _, val in args]
+        idx = 0  # current argument index
+        for i, arg in enumerate(args):
+            try:
+                inp = input(f"{arg[0]}{" (" + arg[1] + ")" if arg[1] else ""}: ")
+            except KeyboardInterrupt:
+                print("\n\033[31mCancelled by user.\033[0m")
+                return
+            
+            args[i] = (arg[0], inp if inp else arg[1])  # Use input or default value
+
+        cmd_output = run_just_dry_run(recipe, [a[1] for a in args])
+
+    write_shell_command(cmd_output)
+    sys.exit(0)
+
+
 def main():
     result = subprocess.run(['just', '--summary'], capture_output=True, text=True)
     candidates = result.stdout.strip().replace(' ', '\0')
 
-    fzf = subprocess.run(
-        ['fzf', '--read0', '--layout=reverse',
-         '--tiebreak=begin,length', '--algo=v1',
-         '--preview=just --dry-run --yes {}',
-         '--preview-window=right:70%:wrap',
-         '--height=20%', '--expect=ctrl-e,ctrl-x,ctrl-s,enter',
-         '--prompt=Run: '],
-        input=candidates.encode('utf-8'),
-        capture_output=True
-    )
+    # if argument is provide, use it as item
+    if len(sys.argv) > 1:
+        item = sys.argv[1]
+        if item not in candidates:
+            print(f"Item '{item}' not found in just recipes.")
+            sys.exit(1)
+        fzf_selected_key = 'enter'
+    else:
 
-    if fzf.returncode != 0 or not fzf.stdout:
-        sys.exit(1)
+        fzf = subprocess.run(
+            ['fzf', '--read0', '--layout=reverse',
+             '--tiebreak=begin,length', '--algo=v1',
+             # '--preview=just --dry-run --yes {}',
+             '--preview=just --show {}',
+             '--preview-window=right:50%:wrap',
+             # '--preview-window=bottom:30%:wrap',
+             '--height=20%', '--expect=ctrl-e,ctrl-x,ctrl-s,ctrl-a,enter',
+             '--prompt=Run: '],
+            input=candidates.encode('utf-8'),
+            capture_output=True
+        )
 
-    output = fzf.stdout.decode('utf-8').split('\n')
-    fzf_selected_key = output[0]
-    item = output[1].strip()
+        if fzf.returncode != 0 or not fzf.stdout:
+            sys.exit(1)
+
+        output = fzf.stdout.decode('utf-8').split('\n')
+        fzf_selected_key = output[0]
+        item = output[1].strip()
+
+    if fzf_selected_key == 'ctrl-a':
+        argument_mode(item)
+
     cmd_output = run_just_dry_run(item)
 
     if "error:" in cmd_output: # right now, if we get this, we assume the function needs arguments
