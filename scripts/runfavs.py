@@ -59,7 +59,7 @@ def argument_mode(recipe):
         idx = 0  # current argument index
         for i, arg in enumerate(args):
             try:
-                inp = input(f"{arg[0]}{" (" + arg[1] + ")" if arg[1] else ""}: ")
+                inp = input(f"{arg[0]}{' (' + arg[1] + ')' if arg[1] else ''}: ")
             except KeyboardInterrupt:
                 print("\n\033[31mCancelled by user.\033[0m")
                 return
