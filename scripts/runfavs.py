@@ -4,12 +4,16 @@ import os
 import tempfile
 import readline
 import re
+import argparse
 
 SHELL_OUTPUT_FILE = "/tmp/runfavs_result.sh"
 
-def run_just_dry_run(item, args=[]):
-    result = subprocess.run(['just', '--dry-run', '--yes', item] + args, capture_output=True, text=True)
-    return result.stderr.strip()
+def run_just_dry_run(item, arguments=[], sing=False):
+    result = subprocess.run(['just', '--dry-run', '--yes', item] + arguments, capture_output=True, text=True)
+    out = result.stderr.strip()
+    if sing:
+        out = f'sg --cmd "{out}"'
+    return out
 
 def write_shell_command(cmd: str, eval=True, save_history=True, edit=False, display=True):
     cmd_str = ""
@@ -73,18 +77,27 @@ def argument_mode(recipe):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Run Justfile recipes with fzf.")
+    parser.add_argument("--sing", action="store_true", help="Enable sing mode.")
+    parser.add_argument("item", nargs="*", help="The Justfile recipe to run, and its arguments.")
+    args = parser.parse_args()
+
+    sing = args.sing
+
     result = subprocess.run(['just', '--summary'], capture_output=True, text=True)
     candidates = result.stdout.strip().replace(' ', '\0')
 
     # if argument is provide, use it as item
-    if len(sys.argv) > 1:
-        item = sys.argv[1]
+    if args.item:
+        item = args.item[0]
+        recipe_args = args.item[1:]
+
         if item not in candidates:
             print(f"Item '{item}' not found in just recipes.")
             sys.exit(1)
         fzf_selected_key = 'enter'
     else:
-
+        recipe_args = [] # No arguments if fzf is used
         fzf = subprocess.run(
             ['fzf', '--read0', '--layout=reverse',
              '--tiebreak=begin,length', '--algo=v1',
@@ -108,27 +121,23 @@ def main():
     if fzf_selected_key == 'ctrl-a':
         argument_mode(item)
 
-    cmd_output = run_just_dry_run(item)
+    cmd_output = run_just_dry_run(item, recipe_args, sing=sing)
 
     if "error:" in cmd_output: # right now, if we get this, we assume the function needs arguments
-        args = cmd_output.split("usage:")[1].strip().split(" ")[2:]
+        just_args = cmd_output.split("usage:")[1].strip().split(" ")[2:]
         #print(cmd_outputjj
         #print(f"Number of required arguments: {num_required_args}")
-        #args = []
+        #just_args = []
         #for i in range(num_required_args):
             # ask for the argument
             #arg = input(f"Argument {i+1}: ")
-            #args.append(arg)
-        cmd_output = run_just_dry_run(item, [f"[{x}]" for x in args])
+            #just_args.append(arg)
+        cmd_output = run_just_dry_run(item, [f"[{x}]" for x in just_args], sing=sing)
         full = cmd_output
-        for arg in args:
+        for arg in just_args:
             cmd_output = cmd_output.replace(f"[{arg}]", "")
         write_shell_command(cmd_output, edit=True, display=full)
         return
-
-        # write_shell_command(f'print -z -- {argstr!r}')
-        #write_shell_command(f'print -z -- {cmd_output!r}')
-    # variables = list_variables(cmd_output)
 
 
     if fzf_selected_key == 'ctrl-e':
@@ -146,7 +155,8 @@ def main():
 
         write_shell_command(edited_cmd)
     elif fzf_selected_key == 'ctrl-s':
-        cmd_output = f'sg --cmd "{cmd_output}"'
+        if not sing: # if sing is enabled, the command is already wrapped in sg
+            cmd_output = f'sg --cmd "{cmd_output}"'
         write_shell_command(cmd_output, edit=True, display=None)
     else:
         write_shell_command(cmd_output)

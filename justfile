@@ -40,10 +40,10 @@ comfyui:
     eval_and_hist CUDA_VISIBLE_DEVICES=0 python main.py --listen --port 9876
 
 # Launch Stable-Diffusion WebUI via sg
-dwui:
+dwui gpu="0":
     source ~/miniconda3/bin/activate /conda_envs/default &&
     cd /projects/stable-diffusion-webui &&
-    eval_and_hist CUDA_VISIBLE_DEVICES=0 ./webui.sh \
+    eval_and_hist CUDA_VISIBLE_DEVICES={{gpu}} ./webui.sh \
         --gradio-auth-path au \
         --disable-safe-unpickle \
         --listen
