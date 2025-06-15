@@ -151,13 +151,14 @@ space() {
 spaces() {
   (setopt null_glob; sudo du -hsx -- * .* | sort -h)
 }
+r() {
+    python ~/dotfiles/scripts/runfavs.py "$@" && source /tmp/runfavs_result.sh
+}
 
 alias gp="~/dotfiles/scripts/gitpull.sh"
 # alias rs="sudo -E python ~/dotfiles/scripts/rsync_singularity_ui.py"
 
 export JUST_JUSTFILE="$HOME/dotfiles/justfile"
-
-alias r="python ~/dotfiles/scripts/runfavs.py && source /tmp/runfavs_result.sh"
 
 alias tm="tmux -u"
 alias tma="tmux -u a"
