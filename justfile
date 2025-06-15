@@ -85,6 +85,9 @@ remote-shells:
 find-recent-files:
     find . -type f -name "*.*" -mmin -200
 
+delete-recent-media-files minutes="180":
+    ~/dotfiles/scripts/delete_recent_files.sh {{minutes}}
+
 rg-files-recursive file:
     rg --files --no-ignore | rg {{file}}
 
