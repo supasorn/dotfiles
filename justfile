@@ -79,7 +79,7 @@ img3dviewer:
     cd /host/data/supasorn/img3dviewer && load_nvm &&
     eval_and_hist node web.js -pw
 
-remote-shells:
+tmux-remote-shells:
     ~/dotfiles/scripts/tmux_remote_shells.sh v1-v23
 
 find-recent-files:
