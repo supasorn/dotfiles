@@ -48,15 +48,15 @@ dwui gpu="0":
         --disable-safe-unpickle \
         --listen
 
-depth_anything:
+depth_anything gpu="0":
     source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
     cd /projects/DAVDA && 
-    eval_and_hist CUDA_VISIBLE_DEVICES=0 python run.py --image
+    eval_and_hist CUDA_VISIBLE_DEVICES={{gpu}} python run.py --image
 
-video_depth_anything:
+video_depth_anything gpu="0":
     source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
     cd /projects/DAVDA && 
-    eval_and_hist CUDA_VISIBLE_DEVICES=0 python run.py --video
+    eval_and_hist CUDA_VISIBLE_DEVICES={{gpu}} python run.py --video
 
 framepack:
     source ~/miniconda3/bin/activate /conda_envs/default &&
