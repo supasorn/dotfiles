@@ -48,6 +48,14 @@ dwui gpu="0":
         --disable-safe-unpickle \
         --listen
 
+dwui-forge gpu="0":
+    source ~/miniconda3/bin/activate /conda_envs/default &&
+    cd /projects/stable-diffusion-webui-forge &&
+    eval_and_hist CUDA_VISIBLE_DEVICES={{gpu}} ./webui.sh \
+        --gradio-auth-path au \
+        --disable-safe-unpickle \
+        --listen
+
 depth_anything gpu="0":
     source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
     cd /projects/DAVDA && 
