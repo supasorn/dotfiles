@@ -154,6 +154,7 @@ spaces() {
 r() {
     python ~/dotfiles/scripts/runfavs.py "$@" && source /tmp/runfavs_result.sh
 }
+alias rs="r --sing"
 
 alias gp="~/dotfiles/scripts/gitpull.sh"
 # alias rs="sudo -E python ~/dotfiles/scripts/rsync_singularity_ui.py"
