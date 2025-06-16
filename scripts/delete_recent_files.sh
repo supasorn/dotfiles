@@ -28,6 +28,17 @@ if ! [[ "$minutes" =~ ^[0-9]+$ ]]; then
     show_help
 fi
 
+# Determine platform-specific stat command
+if stat --version &>/dev/null; then
+    # GNU stat (Linux)
+    get_mtime() { stat -c "%y" "$1"; }
+    get_epoch() { stat -c "%Y" "$1"; }
+else
+    # BSD stat (macOS)
+    get_mtime() { stat -f "%Sm" -t "%Y-%m-%d %H:%M:%S" "$1"; }
+    get_epoch() { stat -f "%m" "$1"; }
+fi
+
 # Function to format elapsed time
 format_elapsed() {
     local seconds=$1
@@ -43,7 +54,6 @@ format_elapsed() {
 }
 
 # Find image and video files modified or created within the specified time window
-# Use -print0 to handle spaces and special characters
 files=()
 while IFS= read -r -d '' f; do
     files+=("$f")
@@ -59,39 +69,37 @@ fi
 
 tmpfile=$(mktemp /tmp/recent_files.XXXXXX)
 current_time=$(date +%s)
+
 for f in "${files[@]}"; do
-    # Get the modification time and format it
-    mtime=$(stat -f "%Sm" -t "%Y-%m-%d %H:%M:%S" "$f")
-    # Calculate elapsed time
-    file_mtime=$(stat -f %m "$f")
+    mtime=$(get_mtime "$f")
+    file_mtime=$(get_epoch "$f")
+
+    if ! [[ "$file_mtime" =~ ^[0-9]+$ ]]; then
+        echo "Warning: Could not get mtime for '$f'" >&2
+        continue
+    fi
+
     elapsed=$((current_time - file_mtime))
-    elapsed_str=$(format_elapsed $elapsed)
-    # Remove leading ./ for consistency and add modification time
+    elapsed_str=$(format_elapsed "$elapsed")
+
     echo "${f#./} (${elapsed_str}, $mtime)" >> "$tmpfile"
 done
 
-# Get the modification time before opening nvim
-orig_mtime=$(stat -f %m "$tmpfile")
+orig_mtime=$(get_epoch "$tmpfile")
 
 nvim "$tmpfile"
 
-# Get the modification time after nvim exits
-new_mtime=$(stat -f %m "$tmpfile")
+new_mtime=$(get_epoch "$tmpfile")
 
-# If the file wasn't modified (user quit without saving), don't delete
 if [[ "$orig_mtime" == "$new_mtime" ]]; then
     echo "No changes made or file not saved. Cancelled."
     rm -f "$tmpfile"
     exit 0
 fi
 
-# Delete files listed in the edited temp file
 while IFS= read -r line; do
-    # Skip empty lines
     [[ -z "$line" ]] && continue
-    # Extract filename by removing the timestamp part
     f="${line% \(*}"
-    # Prepend ./ if not absolute or already relative
     if [[ "$f" != /* && "$f" != ./* ]]; then
         f="./$f"
     fi
@@ -104,3 +112,4 @@ while IFS= read -r line; do
 done < "$tmpfile"
 
 rm -f "$tmpfile"
+
