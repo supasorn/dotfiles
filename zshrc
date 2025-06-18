@@ -240,6 +240,18 @@ if [ -f "$FZFCD" ]; then
     source "$FZFCD"
 fi
 
+FZFPATHCOMPLETE="$HOME/dotfiles/scripts/fzf_path_complete.sh"
+if [ -f "$FZFPATHCOMPLETE" ]; then
+    source "$FZFPATHCOMPLETE"
+fi
+zle -N fzf_path_complete
+bindkey '^P' fzf_path_complete
+# my_append_path() {
+  # LBUFFER+="/my/test/path"
+# }
+# zle -N my_append_path
+# bindkey '^P' my_append_path
+
 if [[ $hn == "rog" ]]; then
   export PATH="/opt/nvim-linux64/bin:$PATH"
   tf-term() {
