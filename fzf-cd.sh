@@ -21,7 +21,7 @@ function cd() {
         # echo "selected_dir: $selected_dir"
 
         if [[ "$key" == "esc" ]]; then
-            builtin cd "$original_dir"
+            # builtin cd "$original_dir"
             return 0
         fi
 
@@ -38,8 +38,12 @@ function cd() {
         fi
 
         # If a directory was selected, change to that directory
-        [[ -n "$selected_dir" ]] || return 0
-        builtin cd "$selected_dir" &> /dev/null
+        if [[ -n "$selected_dir" ]]; then
+            builtin cd "$selected_dir" &> /dev/null
+        else
+            builtin cd "$original_dir"
+            return 0
+        fi
     done
 }
 
