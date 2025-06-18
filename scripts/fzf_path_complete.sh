@@ -36,7 +36,8 @@ fzf_path_complete() {
       echo "${to#$from/}"
     else
       # Use realpath to compute relative path (much simpler!)
-      realpath --relative-to="$from" "$to" 2>/dev/null || echo "$to"
+      echo "$to"
+      # realpath --relative-to="$from" "$to" 2>/dev/null || echo "$to"
     fi
   }
 
