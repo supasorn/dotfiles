@@ -229,13 +229,13 @@ UNAME=$(uname | tr "[:upper:]" "[:lower:]")
 unset TMUX  # allow nested tmux
 hn="$(hostname)"
 
-LFCD="$HOME/.config/lf/lfcd.sh"                               
+LFCD="$HOME/dotfiles/scripts/lfcd.sh"                               
 if [ -f "$LFCD" ]; then
     source "$LFCD"
 fi
 bindkey -s '^o' 'lfcd\n'  # zsh
 
-FZFCD="$HOME/dotfiles/fzf-cd.sh"                               
+FZFCD="$HOME/dotfiles/scripts/fzf-cd.sh"                               
 if [ -f "$FZFCD" ]; then
     source "$FZFCD"
 fi
@@ -296,8 +296,7 @@ fi
 alias sg='python3 /ist-nas/users/supasorn/singularity_slim/run.py'
 alias ns='python3 ~/dotfiles/scripts/lsgpu.py --local'
 
-source ~/.vim/export_lf_icons.sh 2> /dev/null 
-
+source ~/dotfiles/scripts/export_lf_icons.sh 2> /dev/null 
 
 if [[ -n $SSH_CLIENT ]]; then
     # Save the SSH_CLIENT to a file
@@ -413,7 +412,7 @@ fi
 
 
 
-source ~/dotfiles/blinks_singularity.zsh-theme
+source ~/dotfiles/scripts/blinks_singularity.zsh-theme
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
