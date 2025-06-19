@@ -2,7 +2,7 @@ set shell := ["bash", "-uc"]
 
 # Just activate the default env
 activatedefault:
-    source ~/miniconda3/bin/activate /conda_envs/default
+    source /opt/miniconda3/bin/activate /conda_envs/default
 
 # Show memory info
 meminfo:
@@ -35,13 +35,13 @@ download url:
     curl -SL -O {{url}}
 
 comfyui:
-    source ~/miniconda3/bin/activate /conda_envs/default &&
+    source /opt/miniconda3/bin/activate /conda_envs/default &&
     cd /projects/ComfyUI &&
     eval_and_hist CUDA_VISIBLE_DEVICES=0 python main.py --listen --port 9876
 
 # Launch Stable-Diffusion WebUI via sg
 dwui gpu="0":
-    source ~/miniconda3/bin/activate /conda_envs/default &&
+    source /opt/miniconda3/bin/activate /conda_envs/default &&
     cd /projects/stable-diffusion-webui &&
     eval_and_hist CUDA_VISIBLE_DEVICES={{gpu}} ./webui.sh \
         --gradio-auth-path au \
@@ -49,7 +49,7 @@ dwui gpu="0":
         --listen
 
 dwui-forge gpu="0":
-    source ~/miniconda3/bin/activate /conda_envs/default &&
+    source /opt/miniconda3/bin/activate /conda_envs/default &&
     cd /projects/stable-diffusion-webui-forge &&
     eval_and_hist CUDA_VISIBLE_DEVICES={{gpu}} ./webui.sh \
         --gradio-auth-path au \
@@ -57,17 +57,17 @@ dwui-forge gpu="0":
         --listen
 
 depth_anything gpu="0":
-    source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
+    source /opt/miniconda3/bin/activate /conda_envs/video_depth_anything && 
     cd /projects/DAVDA && 
     eval_and_hist CUDA_VISIBLE_DEVICES={{gpu}} python run.py --image
 
 video_depth_anything gpu="0":
-    source ~/miniconda3/bin/activate /conda_envs/video_depth_anything && 
+    source /opt/miniconda3/bin/activate /conda_envs/video_depth_anything && 
     cd /projects/DAVDA && 
     eval_and_hist CUDA_VISIBLE_DEVICES={{gpu}} python run.py --video
 
 framepack:
-    source ~/miniconda3/bin/activate /conda_envs/default &&
+    source /opt/miniconda3/bin/activate /conda_envs/default &&
     cd /projects/FramePack &&
     eval_and_hist CUDA_VISIBLE_DEVICES=0 python demo_gradio.py --server 0.0.0.0 --port 9875
 
@@ -83,7 +83,7 @@ install-just:
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to DEST && sudo cp DEST/just /usr/bin && rm -rf DEST
 
 img3dviewer:
-    source ~/miniconda3/bin/activate /conda_envs/default &&
+    source /opt/miniconda3/bin/activate /conda_envs/default &&
     cd /host/data/supasorn/img3dviewer && load_nvm &&
     eval_and_hist node web.js -pw
 
