@@ -293,7 +293,7 @@ else
   alias run="python3 /home/supasorn/cluster_utils/singularitylauncher.py"
   alias ul="tmux a -t UL"
 fi
-alias sg='python3 /ist-nas/users/supasorn/singularity_slim/run.py'
+alias sg='python3 /ist-nas/users/supasorn/sing/run.py'
 alias ns='python3 ~/dotfiles/scripts/lsgpu.py --local'
 
 source ~/dotfiles/scripts/export_lf_icons.sh 2> /dev/null 
