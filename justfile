@@ -9,26 +9,29 @@ meminfo:
     python ~/dotfiles/scripts/mem_info.py
 
 nas-to-v26:
-    sudo rsync -avh --delete /ist-nas/users/supasorn/singularity_slim/ /home/supasorn/singularity_slim/
+    sudo rsync -avh --delete /ist-nas/users/supasorn/sing/ /home/supasorn/sing/
     sudo rsync -avh --delete /ist-nas/users/supasorn/conda_envs/default/ /home/supasorn/conda_envs/
+
+nas-to-v3:
+    sudo rsync -avh --delete /ist-nas/users/supasorn/sing/ /data/supasorn/sing/
 
 # Sync from NAS to IST
 [confirm]
 nas-to-ist:
-    sudo rsync -avh /ist-nas/users/supasorn/singularity_slim/ /ist/users/supasorn/singularity_slim/
+    sudo rsync -avh /ist-nas/users/supasorn/sing/ /ist/users/supasorn/sing/
 
 [confirm]
 nas-to-ist-del:
-    sudo rsync -avh --delete /ist-nas/users/supasorn/singularity_slim/ /ist/users/supasorn/singularity_slim/
+    sudo rsync -avh --delete /ist-nas/users/supasorn/sing/ /ist/users/supasorn/sing/
 
 # Sync from IST to NAS
 [confirm]
 ist-to-nas:
-    sudo rsync -avh /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/
+    sudo rsync -avh /ist/users/supasorn/sing/ /ist-nas/users/supasorn/sing/
 
 [confirm]
 ist-to-nas-del:
-    sudo rsync -avh --delete /ist/users/supasorn/singularity_slim/ /ist-nas/users/supasorn/singularity_slim/
+    sudo rsync -avh --delete /ist/users/supasorn/sing/ /ist-nas/users/supasorn/sing/
 
 # Download a file (pass the URL as the argument)
 download url:
