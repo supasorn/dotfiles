@@ -157,6 +157,7 @@ r() {
 alias rs="r --sing"
 alias rgf="rg --files --no-ignore | rg"
 alias rg1="rg --max-depth=1"
+alias sz="source ~/.zshrc"
 
 alias gp="~/dotfiles/scripts/gitpull.sh"
 # alias rs="sudo -E python ~/dotfiles/scripts/rsync_singularity_ui.py"
