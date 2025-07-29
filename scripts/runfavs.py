@@ -37,7 +37,7 @@ def write_shell_command(cmd: str, eval=True, save_history=True, edit=False, disp
     elif display != None:
         print(display)
 
-def argument_mode(recipe):
+def argument_mode(recipe, sing):
     result = subprocess.run(['just', '--show', recipe], capture_output=True, text=True)
     lines = result.stdout.strip().splitlines()
     args = [] 
@@ -55,7 +55,7 @@ def argument_mode(recipe):
                 else:
                     args.append((arg, None))
 
-    cmd_output = run_just_dry_run(recipe, ['\033[31m{{'+arg[0]+'}}\033[0m' for arg in args])
+    cmd_output = run_just_dry_run(recipe, ['\033[31m{{'+arg[0]+'}}\033[0m' for arg in args], sing=sing)
     if len(args) > 0:
         print(cmd_output)
 
@@ -70,7 +70,7 @@ def argument_mode(recipe):
             
             args[i] = (arg[0], inp if inp else arg[1])  # Use input or default value
 
-        cmd_output = run_just_dry_run(recipe, [a[1] for a in args])
+        cmd_output = run_just_dry_run(recipe, [a[1] for a in args], sing=sing)
 
     write_shell_command(cmd_output)
     sys.exit(0)
@@ -119,7 +119,7 @@ def main():
         item = output[1].strip()
 
     if fzf_selected_key == 'ctrl-a':
-        argument_mode(item)
+        argument_mode(item, sing)
 
     cmd_output = run_just_dry_run(item, recipe_args, sing=sing)
 
