@@ -102,13 +102,29 @@ def get_gpu_uuid_to_info():
             line = line.strip()
             if not line:
                 continue
-            idx, uuid, name, used_mb, total_mb = [p.strip() for p in line.split(',')]
-            uuid_to_info[uuid] = {
-                'idx': int(idx),
-                'name': name,
-                'used_mb': int(used_mb),
-                'total_mb': int(total_mb),
-            }
+            if line.split(',') == 5:
+                idx, uuid, name, used_mb, total_mb = [p.strip() for p in line.split(',')]
+                uuid_to_info[uuid] = {
+                    'idx': int(idx),
+                    'name': name,
+                    'used_mb': int(used_mb),
+                    'total_mb': int(total_mb),
+                }
+            else:
+                match = re.search(r'GPU(\d+)', line)
+                if match:
+                    idx = int(match.group(1))
+                else:
+                    idx = -1
+
+                uuid_to_info["e"] = {
+                    'idx': idx,
+                    'name': "error",
+                    'used_mb': 0,
+                    'total_mb': 0,
+                }
+
+
     except Exception as e:
         print(e)
     return uuid_to_info
