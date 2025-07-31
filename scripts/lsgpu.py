@@ -102,7 +102,7 @@ def get_gpu_uuid_to_info():
             line = line.strip()
             if not line:
                 continue
-            if line.split(',') == 5:
+            if len(line.split(',')) == 5:
                 idx, uuid, name, used_mb, total_mb = [p.strip() for p in line.split(',')]
                 uuid_to_info[uuid] = {
                     'idx': int(idx),
@@ -119,7 +119,7 @@ def get_gpu_uuid_to_info():
 
                 uuid_to_info["e"] = {
                     'idx': idx,
-                    'name': "error",
+                    'name': "Error",
                     'used_mb': 0,
                     'total_mb': 0,
                 }
@@ -151,6 +151,22 @@ def truncate_prefix(s: str, max_len: int = 40) -> str:
         return s
     # otherwise take the last (max_len-3) chars and prepend "..."
     return '...' + s[-(max_len - 3):]
+
+                  
+
+def visible_len(s):
+    ANSI_ESCAPE = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+    return len(ANSI_ESCAPE.sub('', s))
+
+def rjust_ansi(s, width):
+    vis_len = visible_len(s)
+    padding = max(0, width - vis_len)
+    return ' ' * padding + s
+
+def ljust_ansi(s, width):
+    vis_len = visible_len(s)
+    padding = max(0, width - vis_len)
+    return s + ' ' * padding
 
 
 def get_gpu_processes(mem_thresh):
@@ -256,9 +272,12 @@ def get_gpu_processes(mem_thresh):
         if r[0] != '' and r != rows[0]:
             print(sep)
         line = '|' + '|'.join(
-            f" {str(r[j]).rjust(widths[j])} " if j in [1, 3, 5] else f" {str(r[j]).ljust(widths[j])} "
+            f" {rjust_ansi(str(r[j]), widths[j])} " if j in [3, 5] else f" {ljust_ansi(str(r[j]), widths[j])} "
             for j in range(len(headers))
         ) + '|'
+        xx = r[1] 
+        # print(rjust_ansi(str(r[1]), 30)+"]")
+        # print(widths[1])
         print(line)
         # separate GPU blocks
     print(sep)
