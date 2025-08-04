@@ -10,7 +10,7 @@ meminfo:
 
 nas-to-v26:
     sudo rsync -avh --delete /ist-nas/users/supasorn/sing/ /home/supasorn/sing/
-    sudo rsync -avh --delete /ist-nas/users/supasorn/conda_envs/default/ /home/supasorn/conda_envs/
+    sudo rsync -avh --delete /ist-nas/users/supasorn/conda_envs/default /home/supasorn/conda_envs/
 
 nas-to-v3:
     sudo rsync -avh --delete /ist-nas/users/supasorn/sing/ /data/supasorn/sing/
