@@ -15,7 +15,7 @@ import sys
 from collections import defaultdict
 
 if "clusters" not in os.environ:
-  clusters = ["v%d" % i for i in range(1, 24)]
+  clusters = ["v%d" % i for i in range(1, 25)]
 else:
   clusters = os.environ["clusters"].split(",")
 
