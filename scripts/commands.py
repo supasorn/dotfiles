@@ -32,11 +32,17 @@ def video_depth_anything(gpu = "0"): return f"""
     eval_and_hist CUDA_VISIBLE_DEVICES={gpu} python run.py --video
 """
 
+def test(arg0, gpu = "0"): return f"""
+    {source_video_depth_anything()} && 
+    cd /projects/DAVDA && 
+    eval_and_hist CUDA_VISIBLE_DEVICES={gpu} python run.py --video
+"""
+
 # diffusion webui
 def dwui(gpu="0"): return f"""
     source /opt/miniconda3/bin/activate /conda_envs/default &&
     cd /projects/stable-diffusion-webui &&
-    eval_and_hist CUDA_VISIBLE_DEVICES={{gpu}} ./webui.sh \\
+    eval_and_hist CUDA_VISIBLE_DEVICES={gpu} ./webui.sh \\
         --gradio-auth-path au \\
         --disable-safe-unpickle \\
         --listen

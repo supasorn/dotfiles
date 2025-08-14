@@ -17,7 +17,20 @@ def run_just_dry_run(func_name, arguments=[], sing=False):
         raise ValueError(f"Function '{func_name}' not found in commands module.")
     
     sig = inspect.signature(func)
+    kwargs = {}
+    # TODO: print the functoin out for user to see first
+    for name, param in sig.parameters.items():
+        if param.default is not inspect.Parameter.empty:
+            kwargs[name] = param.default
+        else:
+            value = input(f"{name}: ")
+            kwargs[name] = value
+
+            # kwargs[name] = f'{{{name}}}'
+    print(kwargs)
+    exit()
     # check if the arguments match the signature
+    '''
     if len(arguments) > 0:
         if len(arguments) > len(sig.parameters):
             raise ValueError(f"Function '{func_name}' expects {len(sig.parameters)} arguments, but {len(arguments)} were provided.")
@@ -31,6 +44,7 @@ def run_just_dry_run(func_name, arguments=[], sing=False):
     if sing:
         out = f'sg --cmd "{out}"'
     return out
+    '''
 
 def write_shell_command(cmd: str, eval=True, save_history=True, edit=False, display=True):
     cmd_str = ""
@@ -66,22 +80,24 @@ def main():
     if args.show:
         if args.item and len(args.item) > 0:
             ORANGE = "\033[38;5;214m"
+            RED = "\033[38;5;203m"
             GREEN = "\033[32m"
+            BLUE = "\033[38;5;39m"
             RESET = "\033[0m"
 
 
             func = getattr(commands, args.item[0])
             sig = inspect.signature(func)
-            kwargs = {name: "{"+name+"}" for name in sig.parameters}  # {'a': 'a', 'b': 'b'}
+            kwargs = {name: f"{RED}{{{name}}}{RESET}" for name in sig.parameters}  # {'a': 'a', 'b': 'b'}
             if kwargs:
                 result = test_commands.clean_command(func(**kwargs))
             else:
                 result = test_commands.clean_command(func())
 
             comment = test_commands.get_comment(getattr(commands, args.item[0]))
-            print(f"{ORANGE}{args.item[0]}{sig}{RESET}")
+            print(f"{ORANGE}{args.item[0]}{RED}{sig}{RESET}")
             if comment:
-                print(f"{GREEN}# {comment}{RESET}")
+                print(f"{BLUE}# {comment}{RESET}")
             print(result)
         exit()
             
@@ -129,23 +145,6 @@ def main():
         argument_mode(item, sing)
 
     cmd_output = run_just_dry_run(item, recipe_args, sing=sing)
-
-    if "error:" in cmd_output: # right now, if we get this, we assume the function needs arguments
-        just_args = cmd_output.split("usage:")[1].strip().split(" ")[2:]
-        #print(cmd_outputjj
-        #print(f"Number of required arguments: {num_required_args}")
-        #just_args = []
-        #for i in range(num_required_args):
-            # ask for the argument
-            #arg = input(f"Argument {i+1}: ")
-            #just_args.append(arg)
-        cmd_output = run_just_dry_run(item, [f"[{x}]" for x in just_args], sing=sing)
-        full = cmd_output
-        for arg in just_args:
-            cmd_output = cmd_output.replace(f"[{arg}]", "")
-        write_shell_command(cmd_output, edit=True, display=full)
-        return
-
 
     if fzf_selected_key == 'ctrl-e':
         write_shell_command(cmd_output, edit=True, display=None)
