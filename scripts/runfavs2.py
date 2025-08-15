@@ -18,6 +18,8 @@ RED = "\033[38;5;203m"
 GREEN = "\033[32m"
 BLUE = "\033[38;5;39m"
 RESET = "\033[0m"
+C_CMD = BLUE
+
 def dry_run(func_name, arguments=[], argument_mode=False, sing=False):
     func = getattr(commands, func_name)
     if func is None:
@@ -36,7 +38,7 @@ def dry_run(func_name, arguments=[], argument_mode=False, sing=False):
 
     if prompt_for_value or argument_mode:
         print_command(func_name)
-        print(f"{GREEN}Please provide values for the following arguments{RESET}:")
+        print(f"\n{GREEN}Please provide values for the following arguments{RESET}:")
         for name, value in kwargs.items():
             if value == "":
                 value = input(f"  {RED}{name}{RESET}: ") 
@@ -53,6 +55,8 @@ def dry_run(func_name, arguments=[], argument_mode=False, sing=False):
             if ans.lower() != 'y':
                 print(f"{RED}Command execution cancelled.{RESET}")
                 sys.exit(1)
+            # remove the @confirm line
+            out = '\n'.join([l for l in out.splitlines() if not l.startswith('@confirm')])
 
     if sing:
         out = f'sg --cmd "{out}"'
@@ -90,7 +94,7 @@ def print_command(func_name):
         result = commands_helper.clean_command(func())
 
     comment = commands_helper.get_comment(getattr(commands, func_name))
-    print(f"{ORANGE}{func_name}{RED}{sig}{RESET}")
+    print(f"{C_CMD}{func_name}{RED}{sig}{RESET}")
     if comment:
         print(f"{BLUE}# {comment}{RESET}")
     print(result)
