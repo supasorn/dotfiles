@@ -11,40 +11,41 @@ import inspect
 
 SHELL_OUTPUT_FILE = "/tmp/runfavs_result.sh"
 
-def run_just_dry_run(func_name, arguments=[], sing=False):
+ORANGE = "\033[38;5;214m"
+RED = "\033[38;5;203m"
+GREEN = "\033[32m"
+BLUE = "\033[38;5;39m"
+RESET = "\033[0m"
+def dry_run(func_name, arguments=[], sing=False):
     func = getattr(commands, func_name)
     if func is None:
         raise ValueError(f"Function '{func_name}' not found in commands module.")
     
+    print_command(func_name)
     sig = inspect.signature(func)
     kwargs = {}
     # TODO: print the functoin out for user to see first
+    prompt_for_value = False
     for name, param in sig.parameters.items():
         if param.default is not inspect.Parameter.empty:
             kwargs[name] = param.default
         else:
-            value = input(f"{name}: ")
-            kwargs[name] = value
+            kwargs[name] = ""
+            prompt_for_value = True
 
-            # kwargs[name] = f'{{{name}}}'
-    print(kwargs)
-    exit()
-    # check if the arguments match the signature
-    '''
-    if len(arguments) > 0:
-        if len(arguments) > len(sig.parameters):
-            raise ValueError(f"Function '{func_name}' expects {len(sig.parameters)} arguments, but {len(arguments)} were provided.")
-        elif len(arguments) < len(sig.parameters):
+    if prompt_for_value:
+        print(f"{GREEN}Please provide values for the following arguments{RESET}:")
+        for name, value in kwargs.items():
+            if value == "":
+                value = input(f"{name}: ") 
+                kwargs[name] = value
 
-    elif len(sig.parameters) > 0:
-        raise ValueError(f"Function '{func_name}' expects {len(sig.parameters)} arguments, but none were provided.")
 
-    out = test_commands.clean_command(func(*arguments))
+    out = test_commands.clean_command(func(**kwargs))
 
     if sing:
         out = f'sg --cmd "{out}"'
     return out
-    '''
 
 def write_shell_command(cmd: str, eval=True, save_history=True, edit=False, display=True):
     cmd_str = ""
@@ -68,41 +69,34 @@ def write_shell_command(cmd: str, eval=True, save_history=True, edit=False, disp
     elif display != None:
         print(display)
 
+def print_command(func_name):
+    func = getattr(commands, func_name)
+    sig = inspect.signature(func)
+    kwargs = {name: f"{RED}{{{name}}}{RESET}" for name in sig.parameters}  # {'a': 'a', 'b': 'b'}
+    if kwargs:
+        result = test_commands.clean_command(func(**kwargs))
+    else:
+        result = test_commands.clean_command(func())
+
+    comment = test_commands.get_comment(getattr(commands, func_name))
+    print(f"{ORANGE}{func_name}{RED}{sig}{RESET}")
+    if comment:
+        print(f"{BLUE}# {comment}{RESET}")
+    print(result)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Run Justfile recipes with fzf.")
+    parser = argparse.ArgumentParser(description="Run commands with fzf.")
     parser.add_argument("--sing", action="store_true", help="Enable sing mode.")
     parser.add_argument("--show", action="store_true", help="Enable sing mode.")
-    parser.add_argument("item", nargs="*", help="The Justfile recipe to run, and its arguments.")
+    parser.add_argument("item", nargs="*", help="Command and optionally its arguments")
     args = parser.parse_args()
 
     if args.show:
         if args.item and len(args.item) > 0:
-            ORANGE = "\033[38;5;214m"
-            RED = "\033[38;5;203m"
-            GREEN = "\033[32m"
-            BLUE = "\033[38;5;39m"
-            RESET = "\033[0m"
-
-
-            func = getattr(commands, args.item[0])
-            sig = inspect.signature(func)
-            kwargs = {name: f"{RED}{{{name}}}{RESET}" for name in sig.parameters}  # {'a': 'a', 'b': 'b'}
-            if kwargs:
-                result = test_commands.clean_command(func(**kwargs))
-            else:
-                result = test_commands.clean_command(func())
-
-            comment = test_commands.get_comment(getattr(commands, args.item[0]))
-            print(f"{ORANGE}{args.item[0]}{RED}{sig}{RESET}")
-            if comment:
-                print(f"{BLUE}# {comment}{RESET}")
-            print(result)
+            print_command(args.item[0])
         exit()
             
-            
-
     sing = args.sing
 
     results = test_commands.get_functions_and_args(commands)                          
@@ -112,7 +106,7 @@ def main():
         candidates += f"{result[0]}\0"
 
     # if argument is provide, use it as item
-    if args.item:
+    if args.item and False: # disable this for now
         item = args.item[0]
         recipe_args = args.item[1:]
 
@@ -144,9 +138,10 @@ def main():
     if fzf_selected_key == 'ctrl-a':
         argument_mode(item, sing)
 
-    cmd_output = run_just_dry_run(item, recipe_args, sing=sing)
+    cmd_output = dry_run(item, recipe_args, sing=sing)
 
     if fzf_selected_key == 'ctrl-e':
+        print("HERE" + cmd_output)
         write_shell_command(cmd_output, edit=True, display=None)
     elif fzf_selected_key == 'ctrl-x':
         with tempfile.NamedTemporaryFile(delete=False, suffix='.sh', mode='w') as tmp:

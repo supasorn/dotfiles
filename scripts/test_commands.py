@@ -41,7 +41,7 @@ def get_functions_and_args(module):
 
 def clean_command(command):
     # remove leading tab in each line and remove empty lines and remove trailing or leading whitespace
-    return "\n".join(line.lstrip().rstrip() for line in command.strip().splitlines() if line.strip()) 
+    return "\n".join(line.removeprefix('    ').rstrip() for line in command.splitlines() if line.strip()) 
 
 if __name__ == "__main__":
     for name, args in get_functions_and_args(commands):
