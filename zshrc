@@ -152,7 +152,8 @@ spaces() {
   (setopt null_glob; sudo du -hsx -- * .* | sort -h)
 }
 r() {
-    python ~/dotfiles/scripts/runfavs.py "$@" && source /tmp/runfavs_result.sh
+    # python ~/dotfiles/scripts/runfavs.py "$@" && source /tmp/runfavs_result.sh
+    ~/dotfiles/scripts/runfavs2.py "$@" && source /tmp/runfavs_result.sh
 }
 alias rs="r --sing"
 alias rgf="rg --files --no-ignore | rg"

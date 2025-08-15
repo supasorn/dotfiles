@@ -8,7 +8,7 @@ import readline
 import re
 import argparse
 import commands
-import test_commands
+import commands_helper
 import inspect
 
 SHELL_OUTPUT_FILE = "/tmp/runfavs_result.sh"
@@ -46,7 +46,7 @@ def dry_run(func_name, arguments=[], argument_mode=False, sing=False):
                 kwargs[name] = value
 
 
-    out = test_commands.clean_command(func(**kwargs))
+    out = commands_helper.clean_command(func(**kwargs))
     for line in out.splitlines():
         if line.startswith('@confirm'):
             ans = input(f"{ORANGE}Do you want to run this command? (y/n): {RESET}")
@@ -85,11 +85,11 @@ def print_command(func_name):
     sig = inspect.signature(func)
     kwargs = {name: f"{RED}{{{name}}}{RESET}" for name in sig.parameters}  # {'a': 'a', 'b': 'b'}
     if kwargs:
-        result = test_commands.clean_command(func(**kwargs))
+        result = commands_helper.clean_command(func(**kwargs))
     else:
-        result = test_commands.clean_command(func())
+        result = commands_helper.clean_command(func())
 
-    comment = test_commands.get_comment(getattr(commands, func_name))
+    comment = commands_helper.get_comment(getattr(commands, func_name))
     print(f"{ORANGE}{func_name}{RED}{sig}{RESET}")
     if comment:
         print(f"{BLUE}# {comment}{RESET}")
@@ -109,7 +109,7 @@ def main():
             
     sing = args.sing
 
-    results = test_commands.get_functions_and_args(commands)                          
+    results = commands_helper.get_functions_and_args(commands)                          
     candidates = ""
     for result in results:
         if result[0] == "confirm": continue
@@ -129,7 +129,7 @@ def main():
         fzf = subprocess.run(
             ['fzf', '--read0', '--layout=reverse',
              '--tiebreak=begin,length', '--algo=v1',
-             '--preview=python runfavs2.py --show {}',
+             '--preview=' + os.path.abspath(__file__) + ' --show {}',
              '--preview-window=right:50%:wrap',
              # '--preview-window=bottom:30%:wrap',
              '--height=20%', '--expect=ctrl-e,ctrl-x,ctrl-s,ctrl-a,enter',
