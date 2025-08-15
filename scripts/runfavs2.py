@@ -27,6 +27,7 @@ def dry_run(func_name, arguments=[], argument_mode=False, sing=False):
     
     sig = inspect.signature(func)
     kwargs = {}
+    already_shown_command = False
     # TODO: print the functoin out for user to see first
     prompt_for_value = False
     for name, param in sig.parameters.items():
@@ -38,6 +39,7 @@ def dry_run(func_name, arguments=[], argument_mode=False, sing=False):
 
     if prompt_for_value or argument_mode:
         print_command(func_name)
+        already_shown_command = True
         print(f"\n{GREEN}Please provide values for the following arguments{RESET}:")
         for name, value in kwargs.items():
             if value == "":
@@ -51,6 +53,9 @@ def dry_run(func_name, arguments=[], argument_mode=False, sing=False):
     out = commands_helper.clean_command(func(**kwargs))
     for line in out.splitlines():
         if line.startswith('@confirm'):
+            if not already_shown_command:
+                print_command(func_name)
+                already_shown_command = True
             ans = input(f"{ORANGE}Do you want to run this command? (y/n): {RESET}")
             if ans.lower() != 'y':
                 print(f"{RED}Command execution cancelled.{RESET}")

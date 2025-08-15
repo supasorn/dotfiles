@@ -91,7 +91,7 @@ def open_commands(): return rf"""
 """
 
 def tmux_remote_shells(): return rf"""
-    ~/dotfiles/scripts/tmux_remote_shells.sh v1-v23
+    ~/dotfiles/scripts/tmux_remote_shells.sh v1-v24
 """
 
 def find_recent_files(): return rf"""
