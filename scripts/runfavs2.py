@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import subprocess
 import sys
 import os
@@ -16,12 +18,11 @@ RED = "\033[38;5;203m"
 GREEN = "\033[32m"
 BLUE = "\033[38;5;39m"
 RESET = "\033[0m"
-def dry_run(func_name, arguments=[], sing=False):
+def dry_run(func_name, arguments=[], argument_mode=False, sing=False):
     func = getattr(commands, func_name)
     if func is None:
         raise ValueError(f"Function '{func_name}' not found in commands module.")
     
-    print_command(func_name)
     sig = inspect.signature(func)
     kwargs = {}
     # TODO: print the functoin out for user to see first
@@ -33,15 +34,25 @@ def dry_run(func_name, arguments=[], sing=False):
             kwargs[name] = ""
             prompt_for_value = True
 
-    if prompt_for_value:
+    if prompt_for_value or argument_mode:
+        print_command(func_name)
         print(f"{GREEN}Please provide values for the following arguments{RESET}:")
         for name, value in kwargs.items():
             if value == "":
-                value = input(f"{name}: ") 
+                value = input(f"  {RED}{name}{RESET}: ") 
+                kwargs[name] = value
+            elif argument_mode:
+                value = input(f"  {RED}{name}{RESET} (default: {value}): ") or value
                 kwargs[name] = value
 
 
     out = test_commands.clean_command(func(**kwargs))
+    for line in out.splitlines():
+        if line.startswith('@confirm'):
+            ans = input(f"{ORANGE}Do you want to run this command? (y/n): {RESET}")
+            if ans.lower() != 'y':
+                print(f"{RED}Command execution cancelled.{RESET}")
+                sys.exit(1)
 
     if sing:
         out = f'sg --cmd "{out}"'
@@ -83,7 +94,6 @@ def print_command(func_name):
     if comment:
         print(f"{BLUE}# {comment}{RESET}")
     print(result)
-
 
 def main():
     parser = argparse.ArgumentParser(description="Run commands with fzf.")
@@ -136,9 +146,9 @@ def main():
         item = output[1].strip()
 
     if fzf_selected_key == 'ctrl-a':
-        argument_mode(item, sing)
-
-    cmd_output = dry_run(item, recipe_args, sing=sing)
+        cmd_output = dry_run(item, recipe_args, argument_mode=True, sing=sing)
+    else:
+        cmd_output = dry_run(item, recipe_args, sing=sing)
 
     if fzf_selected_key == 'ctrl-e':
         print("HERE" + cmd_output)
